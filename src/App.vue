@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav" class="flex flex-row bg=">
-      <router-link to="/" class="m-2 mt-0">Home</router-link> |
+      <router-link to="/" class="m-2 mt-0">Home</router-link>
       <router-link to="/rooms" class="m-2 mt-0">About</router-link>
     </div>
     <router-view/>

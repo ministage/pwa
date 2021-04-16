@@ -10,7 +10,7 @@
     </div>
     <VueCal class="bg-gray-500 bg-opacity-70 text-white" style="height: 300px" hide-weekends
             :hideViewSelector="true" :timeFrom="9*60" :timeTo="18*60" :events="events" :clickToNavigate="false" :dblclickToNavigate="false"/>
-    <button class="font-semibold mt-auto w-full py-6 text-center bottom bg-opacity-90 bg-yellow-300 text-4xl">Nu
+    <button @click="Reserve()" class="font-semibold mt-auto w-full py-6 text-center bottom bg-opacity-90 bg-yellow-300 text-4xl">Nu
       reserveren
     </button>
   </div>
@@ -30,7 +30,7 @@ export default {
     bookings: Array,
   },
   computed: {
-    events: function() {
+    events: function () {
       return this.bookings.map(booking => {
         return {
           start: new Date(booking.from),
@@ -38,6 +38,11 @@ export default {
           title: booking.userId,
         };
       });
+    }
+  },
+  methods: {
+    Reserve: function (){
+        this.$router.push('reserve')
     }
   }
 }
