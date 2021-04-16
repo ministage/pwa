@@ -28,6 +28,17 @@ export default {
     name: String,
     amount: Number,
     bookings: Array,
+  },
+  computed: {
+    events: function() {
+      return this.bookings.map(booking => {
+        return {
+          start: new Date(booking.from),
+          end: new Date(booking.to),
+          title: booking.userId,
+        };
+      });
+    }
   }
 }
 </script>

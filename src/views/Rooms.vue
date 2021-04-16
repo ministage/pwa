@@ -4,7 +4,7 @@
     <div v-if="loading" class="loading">
       Loading...
     </div>
-    <div v-if="rooms" class="w-full flex flex-initial flex-row flex-wrap items-stretch">
+    <div v-if="rooms" class="w-full px-3 grid lg:grid-cols-2 grid-cols-1 gap-4">
       <RoomCard v-for="room in rooms" :key="room.id" :name="room.name" :amount="room.numberOfPeople" :bookings="room.bookings" />
     </div>
     
