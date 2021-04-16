@@ -29,6 +29,8 @@ jobs:
       run: yarn install --frozen-lockfile --network-timeout 100000
     - name: Build Vue
       run: yarn build
+    - name: Copy index.html to 404.html
+      run: cp dist/index.html dist/404.html
     - name: GitHub Pages
       uses: crazy-max/ghaction-github-pages@v2.3.0
       with:

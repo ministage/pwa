@@ -4,13 +4,10 @@ import Vue from 'vue'
 axios.defaults.baseURL = 'http://localhost:5000';
 
 export default {
-    getRooms() {
+    async getRooms() {
         if (Vue.config.devtools) {
-            return axios.get('/rooms').then(response => {
-                return response.data;
-            }).catch(error => {
-                throw error;
-            });
+            let response = await axios.get('/rooms');
+            return response.data;
         } else {
             return [{
                 "id": "8c8b0aa3-4c2c-4f50-9297-08d8ffe02aaa",
