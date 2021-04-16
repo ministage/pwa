@@ -11,9 +11,12 @@ module.exports = {
   theme: {
     extend: {
       // eslint-disable-next-line no-unused-vars
-      backgroundImage: theme => ({
-        'room': "url('/img/room.jpg')",
-      }),
+      backgroundImage: theme =>
+        process.env.NODE_ENV === 'production' ? {
+          'room': "url('/pwa/img/room.jpg')",
+        } : {
+          'room': "url('/img/room.jpg')",
+        }
     },
   },
   variants: {
