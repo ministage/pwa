@@ -10,9 +10,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      // eslint-disable-next-line no-unused-vars
       backgroundImage: theme => ({
-        'room': "url('https://www.californiaharderwijk.nl/wp-content/uploads/2019/02/DSC08976.jpg')"
-      })
+        'room': "url('/img/room.jpg')",
+      }),
     },
   },
   variants: {
