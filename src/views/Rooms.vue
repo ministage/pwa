@@ -5,7 +5,7 @@
       Loading...
     </div>
     <div v-if="rooms" class="w-full px-3 grid lg:grid-cols-2 grid-cols-1 gap-4">
-      <RoomCard v-for="room in rooms" :key="room.id" :name="room.name" :amount="room.numberOfPeople" :bookings="room.bookings" />
+      <RoomCard v-for="room in rooms" :on-reserve-click="gotoReserve" :key="room.id" :name="room.name" :amount="room.numberOfPeople" :bookings="room.bookings" />
     </div>
     
   </div>
@@ -44,6 +44,9 @@ export default {
       }).catch(error => {
         ErrorService.displayErrorAlert(error);
       });
+    },
+    gotoReserve(){
+      this.$router.push('/reserve');
     }
   }
 }
