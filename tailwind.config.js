@@ -16,7 +16,11 @@ module.exports = {
           'room': "url('/pwa/img/room.jpg')",
         } : {
           'room': "url('/img/room.jpg')",
-        }
+        },
+      minWidth: {
+        '1/3': '33.333333%',
+        '1/6': '16.666667%'
+      }
     },
   },
   variants: {
