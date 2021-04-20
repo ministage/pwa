@@ -26,7 +26,6 @@ export default {
   name: 'RoomCard',
   props: {
     room: Object,
-
     onReserveClick: Function
   },
   data() {
@@ -34,7 +33,7 @@ export default {
     name: null,
     amount: null,
     bookings: []
-  }
+    }
   },
   computed: {
     events: function() {

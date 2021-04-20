@@ -1,5 +1,6 @@
 <template>
 
+
   <div class="flex flex-col">
 
     <header class="text-4xl text-white bg-blue-900 p-6">Reservering plaatsen</header>
