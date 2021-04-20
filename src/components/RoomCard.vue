@@ -25,10 +25,16 @@ export default {
   components: {VueCal},
   name: 'RoomCard',
   props: {
-    name: String,
-    amount: Number,
-    bookings: Array,
+    room: Object,
+
     onReserveClick: Function
+  },
+  data() {
+    return {
+    name: null,
+    amount: null,
+    bookings: []
+  }
   },
   computed: {
     events: function() {

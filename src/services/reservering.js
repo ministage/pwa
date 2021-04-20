@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://192.168.2.148:5000';
 
 export default {
     async getRooms() {
