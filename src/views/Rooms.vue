@@ -48,6 +48,6 @@ export default {
     gotoReserve(){
       this.$router.push('/reserve');
     }
-  }
+  },
 }
 </script>

@@ -1,4 +1,5 @@
 <template>
+
   <div class="flex flex-col">
 
     <header class="text-4xl text-white bg-blue-900 p-6">Reservering plaatsen</header>
@@ -17,20 +18,27 @@
     </ul>
 
     <div class="bg-white flex flex-col">
+      <VueCal class="bg-blue100 bg-opacity-70 text-white" style="height: 300px" hide-weekends
+              :hideViewSelector="true" :timeFrom="9*60" :timeTo="18*60" :events="events" :clickToNavigate="false" :dblclickToNavigate="false"/>
       <div class="p-6 border-l-2 border-t-2 border-r-2 border-black">
-        <h1 class="text-3xl">Van: </h1>
+        <label class="text-3xl">Datum: </label>
+        <input @select="selectDate" type="date" class="text-3xl bg-yellow-200" :value="today">
+      </div>
+
+      <div class="p-6 border-l-2 border-t-2 border-r-2 border-black">
+        <label class="text-3xl">Van: </label>
         <div class="flex bg-yellow-200 p-6">
-          <h1 class="text-3xl">9:30</h1>
+          <input @select="selectTimeStart" type="time" id="van" class="text-3xl" :value="timeNow" required>
         </div>
       </div>
       <div class="p-6 border-2 border-black">
         <h1 class="text-3xl">Tot:</h1>
         <div class="flex bg-yellow-200 p-6">
-          <h1 class="text-3xl">10:30</h1>
+          <input @select="selectTimeEnd" type="time" id="tot" class="text-3xl" :value="timeLater" required/>
         </div>
       </div>
     </div>
-    <button class="ml-auto mr-auto my-20 rounded-3xl bg-yellow-200 w-1/2 p-6 text-3xl md:text-4xl">Reserveren</button>
+    <button @click="gotoRooms" class="ml-auto mr-auto my-20 rounded-3xl bg-yellow-200 w-1/2 p-6 text-3xl md:text-4xl">Reserveren</button>
   </div>
 </template>
 
@@ -47,16 +55,17 @@ export default {
     SvgIcon
   },
   methods: {
-    selectDate(number){
-      this.numberSelected = number;
+    gotoRooms() {
+      this.$router.push('/rooms')
     },
-    nextMonth(){
-      this.selectedMonth++;
-      this.numberSelected = this.onCurrentMonth ? this.currentDate.getDate() : 1;
+    selectDate(date){
+      this.selectedDate = date;
     },
-    previousMonth(){
-      this.selectedMonth--;
-      this.numberSelected = this.onCurrentMonth ? this.currentDate.getDate() : 1;
+    selectTimeStart(time){
+      this.selectedStart = time;
+    },
+    selectTimeEnd(time){
+      this.selectedEnd = time;
     }
   },
   data() {
@@ -71,26 +80,23 @@ export default {
     }
   },
   computed: {
-    onCurrentMonth() {
-      return this.selectedMonth === this.currentMonth;
-    },
-    dates () {
-      let dates = [];
-      let startDate = this.onCurrentMonth ? this.currentDate.getDate() : 1;
-      for(let i = startDate; i <= this.daysInMonth; i++){
-        dates.push({
-          dag: new Date(this.currentDate.getFullYear(), this.selectedMonth, i).toLocaleDateString("nl-NL", { weekday: 'long' }),
-          number: i
-        })
-      }
-      return dates;
-    },
-    monthName () {
-      let date = new Date(this.currentDate.getFullYear(), this.selectedMonth, 1);
-      let month = date
-          .toLocaleDateString("nl-NL", { month: 'long' });
-      return month.charAt(0).toUpperCase() + month.slice(1);
-    }
+    today: () => date.toISOString().substr(0,10),
+    timeNow: () => date
+        //Get locale string "20-4-2021 14:02:44"
+        .toLocaleString("NL")
+        //Split on space [ "20-4-2021", "14:04:11" ] and get last element
+        .split(' ')[1]
+        //Remove last 3 characters to only get time
+        // "14:04:11" -> "14:04"
+        .slice(0, -3),
+    timeLater: () => date.addMinutes(30)
+        //Get locale string "20-4-2021 14:02:44"
+        .toLocaleString("NL")
+        //Split on space [ "20-4-2021", "14:04:11" ] and get last element
+        .split(' ')[1]
+        //Remove last 3 characters to only get time
+        // "14:04:11" -> "14:04"
+        .slice(0, -3)
   }
 }
 </script>
