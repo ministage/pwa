@@ -12,7 +12,7 @@
         <v-icon>mdi-home</v-icon>
       </v-btn>
 
-      <v-btn height="100%" width="25%" to="/rooms">
+      <v-btn height="100%" width="25%" to="/availability">
         <span class="text-caption">Aanwezigheid</span>
         <v-icon>mdi-map-marker</v-icon>
       </v-btn>

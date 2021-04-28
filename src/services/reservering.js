@@ -1,9 +1,35 @@
 import axios from 'axios'
 import Vue from 'vue'
 
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://localhost:1337';
 
 export default {
+    async getPresences() {
+        if (Vue.config.devtools) {
+            let resonse = await axios.get('/presences');
+            return resonse.data;
+        } else {
+            return [{
+                "id": 1,
+                "is_present": true,
+                "user": {
+                    "id": 1,
+                    "username": "Test",
+                    "email": "test@test.nl",
+                    "provider": "local",
+                    "confirmed": false,
+                    "blocked": true,
+                    "role": 1,
+                    "company": 1,
+                    "presence": 1,
+                    "created_at": "2021-04-28T10:10:42.206Z",
+                    "updated_at": "2021-04-28T10:16:41.841Z"
+                },
+                "created_at": "2021-04-28T10:14:14.474Z",
+                "updated_at": "2021-04-28T10:16:41.834Z"
+            }]
+        }
+    },
     async getRooms() {
         if (Vue.config.devtools) {
             let response = await axios.get('/rooms');

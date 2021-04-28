@@ -22,7 +22,12 @@ const routes = [
     path: '/reserve',
     name: 'Reserve',
     component: () => import('../views/Reserve.vue')
-  }
+  },
+  {
+    path: '/availability',
+    name: 'Availability',
+    component: () => import('../views/Availability.vue')
+  },
 ]
 
 const router = new VueRouter({
