@@ -1,12 +1,12 @@
 <template>
   <v-app>
     <v-main>
-      <v-container fluid>
+      <v-container fluid class="h-full">
         <router-view/>
       </v-container>
     </v-main>
 
-    <v-bottom-navigation app>
+    <v-bottom-navigation v-if="this.$route.name !== 'Login'" app>
       <v-btn height="100%" width="25%" to="/">
         <span class="text-caption">Start</span>
         <v-icon>mdi-home</v-icon>
@@ -31,6 +31,7 @@
     </v-bottom-navigation>
   </v-app>
 </template>
+
 <script>
 
 export default {
