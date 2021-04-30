@@ -6,7 +6,7 @@
       </v-avatar>
 
       <div>
-        <v-card-title>{{ company.name }} - {{ countPresent(company.employees) }} aanwezig</v-card-title>
+        <v-card-title>{{ company.name }} - {{ countPresent(company.employees)}} aanwezig</v-card-title>
         <v-card-text>{{company.description}}</v-card-text>
       </div>
       <v-btn
