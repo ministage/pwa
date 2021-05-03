@@ -1,46 +1,62 @@
 <template>
-  <div class="flex flex-col">
+  <div>
+    <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
+    <div class="flex flex-row justify-between align-center pt-3">
+      <v-btn
+          text
+          class="text-none font-weight-bold"
+      >
+        <v-icon left size="24">mdi-arrow-left</v-icon> Week
+      </v-btn>
 
-    <header class="text-4xl text-white bg-blue-900 p-6">Reservering plaatsen</header>
-    <div class="flex flex-row w-full justify-center">
-      <button @click="previousMonth" class="text-4xl text-center ml-auto"><svg-icon type="mdi" :size="48" :path="chevron_left"></svg-icon></button>
-      <h2 class="text-3xl w-full text-center">{{monthName}}</h2>
-      <button @click="nextMonth" class="text-4xl text-center ml-auto"><svg-icon type="mdi" :size="48" :path="chevron_right"></svg-icon></button>
+      <span class="font-extrabold text-xl">April</span>
+
+      <v-btn
+          text
+          class="text-none font-weight-bold"
+      >
+        Week <v-icon right size="24">mdi-arrow-right</v-icon>
+      </v-btn>
     </div>
-    <ul class="flex flex-row overflow-x-auto overflow-y-hidden h-auto">
-      <li @click="selectDate(date.number)" v-for="date in dates" :key="date.number" class="pb-3 text-center border-2 min-w-1/3 md:min-w-1/6">
-        <div v-if="date.number === numberSelected" class="h-5 bg-blue-900 w-full"></div>
-        <div v-if="date.number !== numberSelected" class="h-5 w-full"></div>
-        <h3 class="text-2xl px-3">{{date.dag}}</h3>
-        <h1 class="text-5xl px-3">{{date.number}}</h1>
-      </li>
-    </ul>
-
-    <div class="bg-white flex flex-col">
-      <div class="p-6 border-l-2 border-t-2 border-r-2 border-black">
-        <h1 class="text-3xl">Van: </h1>
-        <div class="flex bg-yellow-200 p-6">
-          <h1 class="text-3xl">9:30</h1>
-        </div>
-      </div>
-      <div class="p-6 border-2 border-black">
-        <h1 class="text-3xl">Tot:</h1>
-        <div class="flex bg-yellow-200 p-6">
-          <h1 class="text-3xl">10:30</h1>
-        </div>
+    <div class="flex flex-row justify-space-between mt-2 mb-4">
+      <div class="flex flex-col align-center rounded"
+        v-for="day in days" :key="day.date" v-ripple
+      >
+          <span class="text-none align-start font-weight-bold">{{day.name}}</span>
+          <span id="span1"
+              :class="'rounded-circle font-weight-bold ' + (day.date === 28 ? 'selected' : '')"
+          >{{day.date}}</span>
       </div>
     </div>
-    <button class="ml-auto mr-auto my-20 rounded-3xl bg-yellow-200 w-1/2 p-6 text-3xl md:text-4xl">Reserveren</button>
+    <v-calendar
+        class="pt-3"
+        type="day"
+        hide-header
+        locale="nl"
+        first-time="8:00"
+        interval-count="12"
+        interval-height="50"
+        :interval-format="intervalFormatter"
+        v-model="value"
+        ref="calendar"
+    >
+      <template #day-body="{ date, week }">
+        <div
+            class="v-current-time"
+            :class="{ first: date === week[0].date }"
+            :style="{ top: nowY }"
+        ></div>
+      </template>
+    </v-calendar>
   </div>
 </template>
 
 <script>
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiChevronRight, mdiChevronLeft } from '@mdi/js'
+import PageHeader from "@/components/PageHeader";
 
 export default {
   components: {
-    SvgIcon
+    PageHeader
   },
   mounted () {
     this.ready = true
