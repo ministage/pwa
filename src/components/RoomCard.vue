@@ -14,7 +14,7 @@
           <v-btn
               rounded
               elevation="0"
-              color="primary"
+              color="secondary"
               style="color: black;"
               class="text-none font-weight-regular"
               large

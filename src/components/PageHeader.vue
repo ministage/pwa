@@ -1,6 +1,6 @@
 <template>
   <v-theme-provider>
-  <v-app-bar color="primary">
+  <v-app-bar color="secondary">
     <v-icon
         color="black"
         large
