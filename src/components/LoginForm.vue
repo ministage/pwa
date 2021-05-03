@@ -2,7 +2,6 @@
   <v-form
       class="justify-end"
       ref="form"
-      v-model="valid"
       lazy-validation
   >
     <v-text-field
@@ -11,6 +10,7 @@
         label="Emailadres"
         required
         outlined
+        rounded
     ></v-text-field>
 
     <v-text-field
@@ -22,20 +22,23 @@
         label="Wachtwoord"
         required
         outlined
+        rounded
     ></v-text-field>
 
     <div class="flex flex-col">
       <v-btn
-          color="primary"
-          class="mr-4 px-10"
+          color="#29415d"
+          class="px-10 white--text font-weight-regular"
           @click="login"
+          rounded
       >
         Log in
       </v-btn>
       <v-btn
           color="normal"
-          class="mr-4 mt-4"
+          class="mt-4"
           @click="gotoReset"
+          rounded
       >
         Wachtwoord vergeten
       </v-btn>
@@ -48,6 +51,9 @@
 <script>
 export default {
   name: "LoginForm",
+  props: {
+    loginCallback: Function,
+  },
   data: () => ({
     email: '',
     password: '',
@@ -62,7 +68,9 @@ export default {
   }),
   methods: {
     login () {
-        this.$refs.form.validate()
+        if(this.$refs.form.validate()){
+          this.$props.loginCallback(this.email, this.password);
+        }
     },
   }
 }

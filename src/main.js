@@ -10,7 +10,6 @@ import { createProvider } from './vue-apollo'
 Vue.config.productionTip = false
 Vue.config.errorHandler = (error) => ErrorService.onError(error);
 
-
 new Vue({
   router,
   vuetify,
