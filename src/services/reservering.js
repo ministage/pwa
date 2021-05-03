@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 
-axios.defaults.baseURL = 'http://localhost:1337';
+axios.defaults.baseURL = 'http://192.168.178.53:1337';
 
 export default {
     async getPresences() {

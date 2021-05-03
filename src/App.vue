@@ -7,26 +7,17 @@
     </v-main>
 
     <v-bottom-navigation v-if="this.$route.name !== 'Login'" app>
-      <v-btn height="100%" width="25%" to="/">
-        <span class="text-caption">Start</span>
-        <v-icon>mdi-home</v-icon>
-      </v-btn>
-
-      <v-btn height="100%" width="25%" to="/availability">
-        <span class="text-caption">Aanwezigheid</span>
-        <v-icon>mdi-map-marker</v-icon>
-      </v-btn>
-
-      <v-btn height="100%" width="25%" to="/reserve">
-        <span class="text-caption">Reserveringen</span>
-
-        <v-icon>mdi-calendar-blank-outline</v-icon>
-      </v-btn>
-
-      <v-btn height="100%" width="25%" to="/more">
-        <span class="text-caption">Meer</span>
-
-        <v-icon>mdi-dots-horizontal</v-icon>
+      <v-btn
+          v-for="button in buttons"
+          :key="button.location"
+          height="100%"
+          width="25%"
+          :to="button.location"
+          :retain-focus-on-click="false"
+      >
+        <span class="text-caption" v-if="button.routes.includes(path)" style="color: #ecd660;">{{button.name}}</span>
+        <span class="text-caption" v-if="!button.routes.includes(path)" style="color: black;">{{button.name}}</span>
+        <v-icon :color="button.routes.includes(path) ? '#ecd660' : 'black'">{{button.icon}}</v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app>
@@ -36,9 +27,47 @@
 
 export default {
   name: 'App',
-
+  computed: {
+    path(){
+      return this.$route.path
+    }
+  },
   data: () => ({
-    //
+    buttons: [
+      {
+        location: '/',
+        name: 'Home',
+        icon: 'mdi-home',
+        routes: [
+            "/"
+        ]
+      },
+      {
+        location: '/rooms',
+        name: 'Reserveren',
+        icon: 'mdi-calendar-blank-outline',
+        routes: [
+            "/rooms",
+            "/reserve"
+        ]
+      },
+      {
+        location: '/availability',
+        name: 'Aanwezigheid',
+        icon: 'mdi-map-marker',
+        routes: [
+            "/availability"
+        ]
+      },
+      {
+        location: '/more',
+        name: 'Meer',
+        icon: 'mdi-dots-horizontal',
+        routes: [
+            "/more"
+        ]
+      }
+    ]
   }),
 };
 </script>

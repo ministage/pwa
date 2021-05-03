@@ -6,7 +6,7 @@ import {AUTH_TOKEN} from "@/constants/settings";
 Vue.use(VueApollo)
 
 // Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:1337/graphql'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://192.168.178.53:1337/graphql'
 
 // Config
 const defaultOptions = {

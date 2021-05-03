@@ -39,58 +39,107 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronRight, mdiChevronLeft } from '@mdi/js'
 
 export default {
-  mounted() {
-    const d = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
-    this.daysInMonth = d.getDate();
-  },
   components: {
     SvgIcon
   },
+  mounted () {
+    this.ready = true
+    this.scrollToTime()
+    this.updateTime()
+  },
   methods: {
-    selectDate(number){
-      this.numberSelected = number;
+    intervalFormatter(locale) {
+      return locale.time;
     },
-    nextMonth(){
-      this.selectedMonth++;
-      this.numberSelected = this.onCurrentMonth ? this.currentDate.getDate() : 1;
+    getCurrentTime () {
+      return this.cal ? this.cal.times.now.hour * 60 + this.cal.times.now.minute : 0
     },
-    previousMonth(){
-      this.selectedMonth--;
-      this.numberSelected = this.onCurrentMonth ? this.currentDate.getDate() : 1;
-    }
+    scrollToTime () {
+      const time = this.getCurrentTime()
+      const first = Math.max(0, time - (time % 30) - 30)
+
+      this.cal.scrollToTime(first)
+    },
+    updateTime () {
+      setInterval(() => this.cal.updateTimes(), 60 * 1000)
+    },
+  },
+  computed: {
+      cal () {
+        return this.ready ? this.$refs.calendar : null
+      },
+      nowY () {
+        return this.cal ? this.cal.timeToY(this.cal.times.now) + 'px' : '-10px'
+      },
   },
   data() {
     return {
-      chevron_right: mdiChevronRight,
-      chevron_left: mdiChevronLeft,
-      selectedMonth: new Date().getMonth(),
-      daysInMonth: null,
-      currentDate: new Date(),
-      currentMonth: new Date().getMonth(),
-      numberSelected: new Date().getDate(),
+      ready: false,
+      value: '',
+      days: [
+        {
+          name: "Zo",
+          date: 26
+        },
+        {
+          name: "Ma",
+          date: 27
+        },{
+          name: "Di",
+          date: 28
+        },
+        {
+          name: "Wo",
+          date: 29
+        },
+        {
+          name: "Do",
+          date: 30
+        },
+        {
+          name: "Vr",
+          date: 31
+        },
+        {
+          name: "Za",
+          date: 1
+        }
+      ]
     }
   },
-  computed: {
-    onCurrentMonth() {
-      return this.selectedMonth === this.currentMonth;
-    },
-    dates () {
-      let dates = [];
-      let startDate = this.onCurrentMonth ? this.currentDate.getDate() : 1;
-      for(let i = startDate; i <= this.daysInMonth; i++){
-        dates.push({
-          dag: new Date(this.currentDate.getFullYear(), this.selectedMonth, i).toLocaleDateString("nl-NL", { weekday: 'long' }),
-          number: i
-        })
-      }
-      return dates;
-    },
-    monthName () {
-      let date = new Date(this.currentDate.getFullYear(), this.selectedMonth, 1);
-      let month = date
-          .toLocaleDateString("nl-NL", { month: 'long' });
-      return month.charAt(0).toUpperCase() + month.slice(1);
-    }
-  }
+
 }
 </script>
+
+<style scoped lang="scss">
+.selected {
+  background-color: #e0bfbf;
+}
+#span1 {
+  height: 34px;
+  width: 34px;
+  line-height: 34px;
+  text-align: center;
+}
+
+
+.v-current-time {
+  height: 2px;
+  background-color: #e0bfbf;
+  position: absolute;
+  left: -1px;
+  right: 0;
+  pointer-events: none;
+
+&.first::before {
+   content: '';
+   position: absolute;
+   background-color: #e0bfbf;
+   width: 12px;
+   height: 12px;
+   border-radius: 50%;
+   margin-top: -5px;
+   margin-left: -6.5px;
+ }
+}
+</style>
