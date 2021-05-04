@@ -5,10 +5,11 @@
       <span class="mt-auto mb-auto mr-3 text-h5 font-weight-bold">Ik ben:</span>
       <PresenceToggle class="mt-2 mb-2 " :enabled="present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
-    <h2>Klik hierboven om je afwezig te melden</h2>
+    <div class="text-body-1 mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row dense>
       <v-col cols="12" v-for="company in companies" :key="company.id">
         <PresenceCard :company="company"></PresenceCard>
+        <VDivider></VDivider>
       </v-col>
     </v-row>
   </div>
@@ -17,6 +18,8 @@
 <script>
 import gql from 'graphql-tag';
 import PresenceCard from '../components/PresenceCard'
+import PageHeader from "@/components/PageHeader";
+import PresenceToggle from "@/components/PresenceToggle";
 
 export default {
   apollo: {

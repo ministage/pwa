@@ -1,13 +1,15 @@
 <template>
-  <v-card elevation="2">
-    <div class="d-flex flex-no-wrap">
-      <v-avatar size="125" rounded>
-        <v-img :src="transformUrl(company.logo.url)"></v-img>
+  <v-card elevation="0">
+    <div class="d-flex flex-row ml-3">
+      <v-avatar size="60" round class="my-auto">
+        <v-img :src="transformUrl(company.logo.url)" contain></v-img>
       </v-avatar>
 
       <div>
-        <v-card-title>{{ company.name }} - {{ countPresent(company.employees)}} aanwezig</v-card-title>
-        <v-card-text>{{company.description}}</v-card-text>
+        <v-card-title>{{ company.name }}</v-card-title>
+        <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#f26262')">
+          {{ countPresent(company.employees) }} aanwezig
+        </v-card-subtitle>
       </div>
       <v-btn
           icon
@@ -15,7 +17,7 @@
           @click="show = !show"
           large
       >
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+        <v-icon large>{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
       </v-btn>
     </div>
     <v-expand-transition>
@@ -78,6 +80,9 @@ export default {
     },
     countPresent: function (employees) {
       return employees.filter(employee => employee.presence.is_present).length;
+    },
+    countPresence: function (employees) {
+      return employees.filter(employee => employee.presence.is_present).length > 0;
     }
   }
 }
