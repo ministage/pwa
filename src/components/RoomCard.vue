@@ -19,7 +19,7 @@
               class="text-none font-weight-regular"
               large
               to="/reserve"
-          >Bekijk
+          >Selecteer
           </v-btn>
         </v-list-item-action>
       </v-list-item>

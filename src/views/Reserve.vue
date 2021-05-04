@@ -18,7 +18,7 @@
         Week <v-icon right size="24">mdi-arrow-right</v-icon>
       </v-btn>
     </div>
-    <div class="flex flex-row justify-space-between mt-2 mb-4">
+    <div class="flex flex-row justify-space-between mt-2 mb-4 h-16">
       <div class="flex flex-col align-center rounded"
         v-for="day in days" :key="day.date" v-ripple
       >
@@ -28,10 +28,13 @@
           >{{day.date}}</span>
       </div>
     </div>
+
+
     <v-calendar
         class="pt-3"
         type="day"
         hide-header
+        style="max-height: 30rem"
         locale="nl"
         first-time="8:00"
         interval-count="12"
@@ -47,7 +50,20 @@
             :style="{ top: nowY }"
         ></div>
       </template>
+
     </v-calendar>
+    <v-btn
+        color="secondary"
+        dark
+        absolute
+        bottom
+        right
+        fab
+        class="mb-12"
+    >
+      <v-icon color="black">mdi-plus</v-icon>
+    </v-btn>
+
   </div>
 </template>
 

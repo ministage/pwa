@@ -7,8 +7,8 @@
 
     <section class="mt-6 ml-4">
 
-      <div class="text-5xl font-extrabold" >
-      Goedemorgen,
+      <div class="text-5xl font-extrabold">
+        {{ time }},
       </div>
 
       <div class="text-5xl mt-3">{{username}}</div>

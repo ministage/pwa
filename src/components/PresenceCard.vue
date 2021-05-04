@@ -11,17 +11,50 @@
       </div>
       <v-btn
           icon
-          class="ml-auto mt-3 mr-3"
+          class="ml-auto mt-5 mr-3"
           @click="show = !show"
+          large
       >
         <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       </v-btn>
     </div>
     <v-expand-transition>
       <v-list v-show="show">
-        <v-subheader v-for="employee in company.employees" :key="employee.id" :class="employee.presence.is_present ? 'bg-green-200' : 'bg-red-200'">{{ employee.username }} -
-          {{ employee.presence.is_present ? "Aanwezig" : "Afwezig" }}
-        </v-subheader>
+        <div class="ml-6 mr-6" v-for="employee in company.employees" :key="employee.id">
+
+          <div class="flex flex-row justify-space-between">
+            <div class="flex flex-col ml-2.5">
+              <span class="text-xl font-weight-medium black--text">{{ employee.username }}</span>
+              <span
+                  :style="'color: ' + (employee.presence.is_present ? '#9fdfba' : '#f26464')">
+          {{ employee.presence.is_present ? "aanwezig" : "afwezig" }}</span>
+
+            </div>
+            <div class="flex flex-row justify-end">
+              <v-btn
+                  tile
+                  icon
+                  style="background-color: #efe2e2;"
+                  class="rounded mr-2"
+                  large
+              >
+                <v-icon color="black" large>mdi-whatsapp</v-icon>
+              </v-btn>
+              <v-btn
+                  tile
+                  icon
+                  style="background-color: #efe2e2;"
+                  class="rounded mr-2"
+                  large
+              >
+                <v-icon color="black" large>mdi-cellphone</v-icon>
+              </v-btn>
+            </div>
+          </div>
+          <v-divider class="my-2 ml-3"></v-divider>
+        </div>
+
+
       </v-list>
     </v-expand-transition>
   </v-card>
@@ -29,6 +62,8 @@
 
 
 <script>
+import {STRAPI_URL} from "@/constants/settings";
+
 export default {
   name: 'PresenceCard',
   data: () => ({
@@ -39,7 +74,7 @@ export default {
   },
   methods: {
     transformUrl: function (url) {
-      return "http://localhost:1337" + url;
+      return STRAPI_URL + url;
     },
     countPresent: function (employees) {
       return employees.filter(employee => employee.presence.is_present).length;

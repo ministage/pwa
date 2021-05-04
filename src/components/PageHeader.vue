@@ -1,6 +1,9 @@
 <template>
   <v-theme-provider>
-  <v-app-bar color="secondary">
+  <v-app-bar
+      color="secondary"
+      elevation="0"
+  >
     <v-icon
         color="black"
         large
