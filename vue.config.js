@@ -22,6 +22,7 @@ module.exports = {
     pwa: {
         name: "California",
         themeColor: "#e0bfbf",
+        appleMobileWebAppCapable: 'yes',
         iconPaths: {
             faviconSVG: null,
             favicon32: 'img/icons/favicon-32x32.png',
