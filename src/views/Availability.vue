@@ -6,8 +6,15 @@
       <PresenceToggle class="mt-2 mb-2 " :enabled="present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
     <div class="text-body-1 mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
-    <v-row dense>
-      <v-col cols="12" v-for="company in companies" :key="company.id">
+    <v-row
+        dense
+        class="mx-0.5"
+    >
+      <v-col
+          cols="12"
+          v-for="company in companies"
+          :key="company.id"
+      >
         <PresenceCard :company="company"></PresenceCard>
         <VDivider></VDivider>
       </v-col>
