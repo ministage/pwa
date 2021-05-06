@@ -3,7 +3,7 @@
     <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
     <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center">
       <span class="mt-auto mb-auto mr-3 text-h5 font-weight-bold">Ik ben:</span>
-      <PresenceToggle class="mt-auto mb-auto " :enabled="present" :on-toggle="togglePresence"></PresenceToggle>
+      <PresenceToggle class="mt-auto mb-auto " :enabled="$apollo.queries.users_me.loading ? true : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
     <div class="text-body-1 mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row
@@ -27,9 +27,20 @@ import gql from 'graphql-tag';
 import PresenceCard from '../components/PresenceCard'
 import PageHeader from "@/components/PageHeader";
 import PresenceToggle from "@/components/PresenceToggle";
+import {USER_DATA} from "@/constants/settings";
+import {PRESENCE_MUTATUTION} from "@/constants/graphql";
 
 export default {
   apollo: {
+    users_me: {
+      query: gql`query {
+           users_me {
+             is_present
+           }
+        }`,
+      client: 'system',
+      pollInterval: 1000,
+    },
     companies: {
       query: gql`query {
         companies {
@@ -43,14 +54,12 @@ export default {
                 id
                 first_name
                 last_name
-                presence {
-                    is_present
-                }
+                is_present
             }
       }
     }`,
       update: data => {
-        let getPresent = (company) => company.employees.filter(e => e.presence.is_present).length;
+        let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
       pollInterval: 1000,
@@ -62,19 +71,26 @@ export default {
     PageHeader,
     PresenceCard,
   },
-  data: () => ({
-    present: true,
-  }),
   methods: {
     gotoReserve() {
       this.$router.push('/reserve');
     },
-    togglePresence(){
-      this.present = !this.present;
+    async togglePresence(current){
+      console.log(current);
+      console.log(!current);
+      console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
+      await this.$apollo.mutate({
+        mutation: PRESENCE_MUTATUTION,
+        variables: {
+          userid: JSON.parse(localStorage.getItem(USER_DATA)).id,
+          presence: !current
+        },
+        client: 'system'
+      });
     },
     getPresent(employees) {
       return employees;
     }
-  }
+  },
 }
 </script>

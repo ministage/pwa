@@ -21,8 +21,8 @@
             <div class="flex flex-col ml-2.5">
               <span class="text-xl font-weight-medium black--text">{{ employee.first_name + " " + employee.last_name }}</span>
               <span
-                  :style="'color: ' + (employee.presence && employee.presence[0].is_present ? '#9fdfba' : '#f26464')">
-          {{ (employee.presence && employee.presence[0].is_present) ? "aanwezig" : "afwezig" }}</span>
+                  :style="'color: ' + (employee.is_present ? '#9fdfba' : '#f26464')">
+          {{ (employee.is_present) ? "aanwezig" : "afwezig" }}</span>
 
             </div>
             <div class="flex flex-row justify-end">
@@ -72,7 +72,7 @@ export default {
       return API_URL + '/assets/' + id;
     },
     countPresent: function (employees) {
-      return employees.filter(employee => employee.presence[0]?.is_present).length;
+      return employees.filter(employee => employee.is_present).length;
     },
     countPresence: function (employees) {
       return this.countPresent(employees) > 0;

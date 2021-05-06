@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-pill flex flex-row flex-grow-0 align-center" :class="button_style" @click="onToggle">
+  <div class="rounded-pill flex flex-row flex-grow-0 align-center" :class="button_style" @click="onClick">
     <v-fade-transition hide-on-leave>
     <span v-if="enabled" class="ml-3 mr-2">Aanwezig</span>
     </v-fade-transition>
@@ -23,6 +23,11 @@ export default {
       return this.enabled ? "on" : "off";
     }
   },
+  methods: {
+    onClick(){
+      this.onToggle(this.enabled);
+    }
+  }
 }
 </script>
 

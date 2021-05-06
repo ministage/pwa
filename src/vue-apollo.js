@@ -11,10 +11,7 @@ import {createApolloClient} from "vue-cli-plugin-apollo/graphql-client";
 
 
 const url = process.env.VUE_APP_GRAPHQL_HTTP || API_URL;
-const httpLink = createHttpLink({
-  uri: url + '/graphql',
-  credentials: "include"
-})
+
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -37,8 +34,6 @@ const refreshTokenLink = new TokenRefreshLink({
   // Check if the current access token is valid
   isTokenValidOrUndefined: () => {
     const token = getAccessToken();
-    console.log("test");
-    console.log(token);
     if (!token)
       return true;
     if(token === "false")
@@ -58,8 +53,6 @@ const refreshTokenLink = new TokenRefreshLink({
     let body = JSON.stringify({
       refresh_token: token
     });
-    console.log('starting fetch');
-    console.log(body);
     return fetch(url + '/auth/refresh', {
       method: 'POST',
       headers: {
@@ -98,7 +91,6 @@ const refreshTokenLink = new TokenRefreshLink({
   },
   // Set new access token
   handleFetch: (tokens) => {
-    console.log(tokens);
     const { access_token, refresh_token } = tokens;
     localStorage.setItem(ACCESS_TOKEN, access_token);
     localStorage.setItem(REFRESH_TOKEN, refresh_token);
@@ -108,17 +100,36 @@ const refreshTokenLink = new TokenRefreshLink({
 // Install the vue plugin
 Vue.use(VueApollo)
 
+const normalHttp = createHttpLink({
+  uri: API_URL + '/graphql',
+})
+
+const systemHttp = createHttpLink({
+  uri: API_URL + '/graphql/system',
+})
+
 // Call this in the Vue app file
 export function createProvider (options = {}) {
   // Create apollo client
-  const { apolloClient } = createApolloClient({
+  const normal = createApolloClient({
     ...options,
-    link: ApolloLink.from([refreshTokenLink, authLink, httpLink]),
+    link: ApolloLink.from([refreshTokenLink, authLink, normalHttp]),
     defaultHttpLink: false
-  })
+  }).apolloClient;
+
+  const system = createApolloClient({
+    ...options,
+    link: ApolloLink.from([refreshTokenLink, authLink, systemHttp]),
+    defaultHttpLink: false,
+  }).apolloClient;
+
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
-    defaultClient: apolloClient,
+    clients: {
+      normal,
+      system
+    },
+    defaultClient: normal,
     defaultOptions: {
       $query: {
         // fetchPolicy: 'cache-and-network',
