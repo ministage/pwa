@@ -30,19 +30,13 @@ import PresenceToggle from "@/components/PresenceToggle";
 import {USER_DATA} from "@/constants/settings";
 import {PRESENCE_MUTATUTION} from "@/constants/graphql";
 
-export default {
-  apollo: {
-    users_me: {
-      query: gql`query {
+const USERS_ME = gql`query {
            users_me {
              is_present
            }
-        }`,
-      client: 'system',
-      pollInterval: 1000,
-    },
-    companies: {
-      query: gql`query {
+        }`;
+
+const COMPANIES = gql`query {
         companies {
             id
             name
@@ -57,12 +51,20 @@ export default {
                 is_present
             }
       }
-    }`,
+    }`;
+
+export default {
+  apollo: {
+    users_me: {
+      query: USERS_ME,
+      client: 'system',
+    },
+    companies: {
+      query: COMPANIES,
       update: data => {
         let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
-      pollInterval: 1000,
     },
   },
   name: 'Home',
@@ -79,14 +81,32 @@ export default {
       console.log(current);
       console.log(!current);
       console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
+      let id = JSON.parse(localStorage.getItem(USER_DATA)).id
       await this.$apollo.mutate({
         mutation: PRESENCE_MUTATUTION,
         variables: {
-          userid: JSON.parse(localStorage.getItem(USER_DATA)).id,
+          userid: id,
           presence: !current
         },
-        client: 'system'
+        client: 'system',
+        update: (store, { data: update_users_item }) => {
+          if(update_users_item.is_present !== null){
+            const data = store.readQuery({query: USERS_ME});
+            data.users_me.is_present = !current;
+            store.writeQuery({
+              query: USERS_ME,
+              data
+            });
+          }
+        },
+        optimisticResponse: {
+          update_users_item:{
+            is_present:false,
+            __typename:"directus_users"
+          }
+        },
       });
+      await this.$apollo.queries.companies.refetch();
     },
     getPresent(employees) {
       return employees;
