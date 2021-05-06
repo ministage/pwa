@@ -6,8 +6,8 @@ import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import jwtDecode from "jwt-decode";
 import { ApolloLink } from "apollo-link";
 
-import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
 import {ACCESS_TOKEN, REFRESH_TOKEN, API_URL} from "@/constants/settings";
+import {createApolloClient} from "vue-cli-plugin-apollo/graphql-client";
 
 
 const url = process.env.VUE_APP_GRAPHQL_HTTP || API_URL;
@@ -30,16 +30,19 @@ const authLink = setContext((_, { headers }) => {
 
 const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN);
 
-const getRefeshToken = () => localStorage.getItem(REFRESH_TOKEN);
+const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN);
 
 const refreshTokenLink = new TokenRefreshLink({
-  accessTokenField: "access_token",
+  accessTokenField: 'data',
   // Check if the current access token is valid
   isTokenValidOrUndefined: () => {
     const token = getAccessToken();
-
+    console.log("test");
+    console.log(token);
     if (!token)
       return true;
+    if(token === "false")
+      return false;
 
     try{
       const { exp } = jwtDecode(token);
@@ -51,20 +54,54 @@ const refreshTokenLink = new TokenRefreshLink({
   },
   // Fetch new access token
   fetchAccessToken: () => {
-    console.log(process.env.VUE_APP_API_URI + '/test');
+    let token = getRefreshToken();
+    let body = JSON.stringify({
+      refresh_token: token
+    });
+    console.log('starting fetch');
+    console.log(body);
     return fetch(url + '/auth/refresh', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        refresh_token: getRefeshToken()
-      })
+      body: body
     });
   },
+
+  handleResponse: () => { return function (response) {
+    return response
+        .text()
+        .then(function (bodyText) {
+          if (typeof bodyText !== 'string' || !bodyText.length) {
+            return bodyText || '';
+          }
+          try {
+            return JSON.parse(bodyText);
+          } catch (err) {
+            var parseError = err;
+            parseError.response = response;
+            parseError.statusCode = response.status;
+            parseError.bodyText = bodyText;
+            return Promise.reject(parseError);
+          }
+        })
+        .then(function (parsedBody) {
+          if (response.status >= 300) {
+            this.throwServerError(response, parsedBody, "Response not successful: Received status code " + response.status);
+          }
+          return {
+            data: parsedBody
+          };
+        });
+    }
+  },
   // Set new access token
-  handleFetch: accessToken => {
-    localStorage.setItem(ACCESS_TOKEN, accessToken)
+  handleFetch: (tokens) => {
+    console.log(tokens);
+    const { access_token, refresh_token } = tokens;
+    localStorage.setItem(ACCESS_TOKEN, access_token);
+    localStorage.setItem(REFRESH_TOKEN, refresh_token);
   }
 })
 
@@ -74,11 +111,11 @@ Vue.use(VueApollo)
 // Call this in the Vue app file
 export function createProvider (options = {}) {
   // Create apollo client
-  const { apolloClient, wsClient } = createApolloClient({
+  const { apolloClient } = createApolloClient({
     ...options,
-    link: ApolloLink.from([refreshTokenLink, authLink, httpLink])
+    link: ApolloLink.from([refreshTokenLink, authLink, httpLink]),
+    defaultHttpLink: false
   })
-  apolloClient.wsClient = wsClient
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
