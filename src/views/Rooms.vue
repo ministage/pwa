@@ -7,7 +7,7 @@
           elevation="0"
           color="secondary"
           style="color: black;"
-          class="text-none font-weight-regula ml-60 mt-56"
+          class="text-none font-weight-regula ml-48 mt-48 mb-4"
           large
           to="/reserve"
       >Reserveer ruimte

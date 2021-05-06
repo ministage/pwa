@@ -53,6 +53,7 @@ export default {
             "/rooms",
             "/reserve",
             "/reserveinformation",
+            "/reserveconfirmation"
         ]
       },
       {

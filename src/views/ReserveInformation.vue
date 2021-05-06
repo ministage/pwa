@@ -2,12 +2,12 @@
   <div>
     <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
     <v-form class="flex flex-col mt-16 align-center" ref="form">
-      <v-text-field v-model="Bedrijfsnaam" rounded outlined class="w-10/12" required dense label="Bedrijfsnaam"></v-text-field>  <!--:label="company"-->
-      <v-text-field v-model="Datum" rounded outlined class="w-10/12" label="Datum" required type="date" dense></v-text-field>
-      <v-text-field v-model="Starttijd" rounded outlined class="w-10/12" label="Starttijd" required type="time" dense></v-text-field>
-      <v-text-field v-model="Eindtijd" rounded outlined class="w-10/12" label="Eindtijd" required type="time" dense></v-text-field>
-      <v-select v-model="Vergaderruimte" rounded outlined class="w-10/12" label="Vergaderruimte" required :items="rooms" dense></v-select>
-      <v-text-field v-model="Opmerking" rounded outlined class="w-10/12" label="Opmerking" dense></v-text-field>
+      <v-text-field rounded outlined class="w-10/12" required dense label="Bedrijf"></v-text-field>  <!--:label="company"-->
+      <v-text-field rounded outlined class="w-10/12" label="Datum" required type="date" dense></v-text-field>
+      <v-text-field rounded outlined class="w-10/12" label="Starttijd" required type="time" dense></v-text-field>
+      <v-text-field rounded outlined class="w-10/12" label="Eindtijd" required type="time" dense></v-text-field>
+      <v-select rounded outlined class="w-10/12" label="Vergaderruimte" required :items="rooms" dense></v-select>
+      <v-text-field rounded outlined class="w-10/12" label="Opmerking" dense></v-text-field>
       <v-btn color="primary" class="w-10/12" rounded to="/reserveconfirmation">
         Reservering plaatsen
       </v-btn>
@@ -28,7 +28,7 @@ export default {
     company: () => {
       let json = localStorage.getItem(USER_DATA);
       let user = JSON.parse(json);
-      return user.company;
+      return user.company.name;
     },
   },
   apollo: {
