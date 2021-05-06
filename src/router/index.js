@@ -49,6 +49,22 @@ const routes = [
     meta: {
       guest: true,
     }
+  },
+  {
+    path: '/reserveinformation',
+    name: 'ReserveInformation',
+    component: () => import('../views/ReserveInformation.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/reserveconfirmation',
+    name: 'ReserveConfirmation',
+    component: () => import('../views/ReserveConfirmation.vue'),
+    meta: {
+      requiresAuth: true,
+    }
   }
 ]
 

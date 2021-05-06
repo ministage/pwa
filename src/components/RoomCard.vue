@@ -11,16 +11,7 @@
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn
-              rounded
-              elevation="0"
-              color="secondary"
-              style="color: black;"
-              class="text-none font-weight-regular"
-              large
-              to="/reserve"
-          >Selecteer
-          </v-btn>
+
         </v-list-item-action>
       </v-list-item>
     </v-theme-provider>

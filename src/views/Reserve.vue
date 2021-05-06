@@ -6,7 +6,8 @@
           text
           class="text-none font-weight-bold"
       >
-        <v-icon left size="24">mdi-arrow-left</v-icon> Week
+        <v-icon left size="24">mdi-arrow-left</v-icon>
+        Week
       </v-btn>
 
       <span class="font-extrabold text-xl">April</span>
@@ -15,17 +16,18 @@
           text
           class="text-none font-weight-bold"
       >
-        Week <v-icon right size="24">mdi-arrow-right</v-icon>
+        Week
+        <v-icon right size="24">mdi-arrow-right</v-icon>
       </v-btn>
     </div>
     <div class="flex flex-row justify-space-between mt-2 mb-4 h-16">
       <div class="flex flex-col align-center rounded"
-        v-for="day in days" :key="day.date" v-ripple
+           v-for="day in days" :key="day.date" v-ripple
       >
-          <span class="text-none align-start font-weight-bold">{{day.name}}</span>
-          <span id="span1"
+        <span class="text-none align-start font-weight-bold">{{ day.name }}</span>
+        <span id="span1"
               :class="'rounded-circle font-weight-bold ' + (day.date === 28 ? 'selected' : '')"
-          >{{day.date}}</span>
+        >{{ day.date }}</span>
       </div>
     </div>
 
@@ -52,18 +54,21 @@
       </template>
 
     </v-calendar>
-    <v-btn
-        color="secondary"
-        dark
-        absolute
-        bottom
-        right
-        fab
-        class="mb-12"
-    >
-      <v-icon color="black">mdi-plus</v-icon>
-    </v-btn>
-
+    <v-fab-transition
+    origin="center center">
+      <v-btn
+          color="secondary"
+          dark
+          absolute
+          bottom
+          right
+          fab
+          class="mb-12"
+          to="/reserveinformation"
+      >
+        <v-icon color="black">mdi-plus</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </div>
 </template>
 
@@ -74,7 +79,7 @@ export default {
   components: {
     PageHeader
   },
-  mounted () {
+  mounted() {
     this.ready = true
     this.scrollToTime()
     this.updateTime()
@@ -83,26 +88,26 @@ export default {
     intervalFormatter(locale) {
       return locale.time;
     },
-    getCurrentTime () {
+    getCurrentTime() {
       return this.cal ? this.cal.times.now.hour * 60 + this.cal.times.now.minute : 0
     },
-    scrollToTime () {
+    scrollToTime() {
       const time = this.getCurrentTime()
       const first = Math.max(0, time - (time % 30) - 30)
 
       this.cal.scrollToTime(first)
     },
-    updateTime () {
+    updateTime() {
       setInterval(() => this.cal.updateTimes(), 60 * 1000)
     },
   },
   computed: {
-      cal () {
-        return this.ready ? this.$refs.calendar : null
-      },
-      nowY () {
-        return this.cal ? this.cal.timeToY(this.cal.times.now) + 'px' : '-10px'
-      },
+    cal() {
+      return this.ready ? this.$refs.calendar : null
+    },
+    nowY() {
+      return this.cal ? this.cal.timeToY(this.cal.times.now) + 'px' : '-10px'
+    },
   },
   data() {
     return {
@@ -116,7 +121,7 @@ export default {
         {
           name: "Ma",
           date: 27
-        },{
+        }, {
           name: "Di",
           date: 28
         },
@@ -147,6 +152,7 @@ export default {
 .selected {
   background-color: #e0bfbf;
 }
+
 #span1 {
   height: 34px;
   width: 34px;
@@ -163,15 +169,15 @@ export default {
   right: 0;
   pointer-events: none;
 
-&.first::before {
-   content: '';
-   position: absolute;
-   background-color: #e0bfbf;
-   width: 12px;
-   height: 12px;
-   border-radius: 50%;
-   margin-top: -5px;
-   margin-left: -6.5px;
- }
+  &.first::before {
+    content: '';
+    position: absolute;
+    background-color: #e0bfbf;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: -5px;
+    margin-left: -6.5px;
+  }
 }
 </style>

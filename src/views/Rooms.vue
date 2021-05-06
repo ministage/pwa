@@ -1,7 +1,18 @@
 <template>
   <div>
     <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
-    <v-img :transition="false" style="height: 20%" :src="require('../assets/rooms.jpg')"></v-img>
+    <v-img :transition="false" style="height: 20%" :src="require('../assets/rooms.jpg')">
+      <v-btn
+          rounded
+          elevation="0"
+          color="secondary"
+          style="color: black;"
+          class="text-none font-weight-regula ml-60 mt-56"
+          large
+          to="/reserve"
+      >Reserveer ruimte
+      </v-btn>
+    </v-img>
     <v-list>
       <RoomCard v-for="room in rooms" :key="room.id" :room="room"></RoomCard>
     </v-list>

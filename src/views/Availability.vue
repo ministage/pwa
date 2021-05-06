@@ -1,9 +1,9 @@
 <template>
   <div>
-    <PageHeader icon="mdi-map-marker" name="Aanwezigheid"></PageHeader>
-    <div style="color: black; background-color: #f7f0f0" class="flex flex-row w-full justify-center">
+    <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
+    <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center">
       <span class="mt-auto mb-auto mr-3 text-h5 font-weight-bold">Ik ben:</span>
-      <PresenceToggle class="mt-2 mb-2 " :enabled="present" :on-toggle="togglePresence"></PresenceToggle>
+      <PresenceToggle class="mt-auto mb-auto " :enabled="present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
     <div class="text-body-1 mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row

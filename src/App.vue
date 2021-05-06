@@ -6,14 +6,18 @@
       </v-container>
     </v-main>
 
-    <v-bottom-navigation v-if="this.$route.name !== 'Login'" app>
+    <v-bottom-navigation app v-if="this.$route.name !== 'Login'"
+    >
       <v-btn
+          plain
+          :ripple="false"
           v-for="button in buttons"
           :key="button.location"
           height="100%"
           width="25%"
           :to="button.location"
           :retain-focus-on-click="false"
+
       >
         <span class="text-caption" style="color: black;">{{button.name}}</span>
         <v-icon :color="button.routes.includes(path) ? '#ecd660' : 'black'">{{button.icon}}</v-icon>
@@ -36,7 +40,7 @@ export default {
       {
         location: '/',
         name: 'Home',
-        icon: 'mdi-home',
+        icon: 'mdi-home-outline',
         routes: [
             "/"
         ]
@@ -47,13 +51,14 @@ export default {
         icon: 'mdi-calendar-blank-outline',
         routes: [
             "/rooms",
-            "/reserve"
+            "/reserve",
+            "/reserveinformation",
         ]
       },
       {
         location: '/availability',
         name: 'Aanwezigheid',
-        icon: 'mdi-map-marker',
+        icon: 'mdi-map-marker-outline',
         routes: [
             "/availability"
         ]

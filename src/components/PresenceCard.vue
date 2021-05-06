@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="0">
-    <div class="d-flex flex-row ml-3">
+    <div class="d-flex flex-row ml-3" @click="show = !show" v-ripple>
       <v-avatar size="60" round class="my-auto">
         <v-img :src="transformUrl(company.logo.url)" contain></v-img>
       </v-avatar>
@@ -11,14 +11,7 @@
           {{ countPresent(company.employees) }} aanwezig
         </v-card-subtitle>
       </div>
-      <v-btn
-          icon
-          class="ml-auto mt-5 mr-3"
-          @click="show = !show"
-          large
-      >
-        <v-icon large>{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
-      </v-btn>
+        <v-icon large class="ml-auto mt-5 mr-3 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
     </div>
     <v-expand-transition>
       <v-list v-show="show">
@@ -36,8 +29,8 @@
               <v-btn
                   tile
                   icon
-                  style="background-color: #efe2e2;"
-                  class="rounded mr-2"
+                  style="background-color: #efe2e2;  border-radius: 30%"
+                  class="mr-2"
                   large
               >
                 <v-icon color="black" large>mdi-whatsapp</v-icon>
@@ -45,9 +38,9 @@
               <v-btn
                   tile
                   icon
-                  style="background-color: #efe2e2;"
-                  class="rounded mr-2"
+                  style="background-color: #efe2e2; border-radius: 30%"
                   large
+                  class="mr-2"
               >
                 <v-icon color="black" large>mdi-cellphone</v-icon>
               </v-btn>
