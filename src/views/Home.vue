@@ -62,7 +62,7 @@ export default {
         return "Goedemorgen";
       } else if (hour >= 12 && hour < 18) {
         return "Goedemiddag";
-      } else if (hour >= 18 && hour < 24) {
+      } else if ((hour >= 18 && hour < 24) || (hour >= 0 && hour <= 6)) {
         return "Goedenavond";
       }
     }
