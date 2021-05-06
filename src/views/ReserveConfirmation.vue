@@ -20,7 +20,7 @@
       </div>
     </div>
     <v-btn color="secondary" class="w-10/12 ml-auto mr-auto mb-4" rounded>Delen</v-btn>
-    <v-btn color="primary" class="w-10/12 ml-auto mr-auto" rounded>Terug naar ruimtes</v-btn>
+    <v-btn color="primary" class="w-10/12 ml-auto mr-auto" rounded to="/rooms">Terug naar ruimtes</v-btn>
   </div>
 </template>
 
