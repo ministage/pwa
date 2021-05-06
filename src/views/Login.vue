@@ -13,8 +13,8 @@
 
 <script>
 import LoginForm from '../components/LoginForm.vue'
-import {LOGIN_MUTATION} from "@/constants/graphql";
-import {AUTH_TOKEN, USER_DATA} from "@/constants/settings";
+import {API_URL, USER_DATA} from "@/constants/settings";
+import {onLogin} from "@/vue-apollo";
 
 export default {
   name: "Login",
@@ -22,22 +22,40 @@ export default {
     LoginForm
   },
   methods: {
-    login(email, password) {
-      this.$apollo.mutate({
-        mutation: LOGIN_MUTATION,
-        variables: {
-          email,
-          password
+    async login(email, password) {
+      try{
+        let response = await fetch(API_URL + "/auth/login", {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+        if(!response.ok) {
+          throw(await response.text());
         }
-      }).then((result) => {
-        const user = result.data.login.user;
-        const token = result.data.login.jwt;
-        localStorage.setItem(USER_DATA, JSON.stringify(user));
-        localStorage.setItem(AUTH_TOKEN, token);
-        this.$router.push({path: '/'})
-      }).catch((error) => {
+
+          let json = await response.json();
+          const { access_token, refresh_token } = json.data;
+          await onLogin(this.$apollo.getClient(), access_token, refresh_token);
+          response = await fetch(API_URL + "/users/me", {
+            headers: {
+              "Authorization": `Bearer ${access_token}`
+            }
+          });
+          if(!response.ok){
+            throw(await response.text());
+          }
+          let user = await response.json();
+          localStorage.setItem(USER_DATA, JSON.stringify(user.data));
+          await this.$router.push({path: '/'})
+
+      } catch(error) {
         console.error(error);
-      });
+      }
     },
   }
 }

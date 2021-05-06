@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import {AUTH_TOKEN} from "@/constants/settings";
+import {ACCESS_TOKEN} from "@/constants/settings";
 
 Vue.use(VueRouter)
 
@@ -76,7 +76,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem(AUTH_TOKEN) == null) {
+    if (localStorage.getItem(ACCESS_TOKEN) == null) {
       next({
         path: '/login',
         params: { nextUrl: to.fullPath }
@@ -97,7 +97,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else if(to.matched.some(record => record.meta.guest)) {
-    if(localStorage.getItem(AUTH_TOKEN) == null){
+    if(localStorage.getItem(ACCESS_TOKEN) == null){
       next()
     }
     else{

@@ -1,3 +1,4 @@
-export const AUTH_TOKEN = 'auth-token';
+export const ACCESS_TOKEN = 'auth-token';
+export const REFRESH_TOKEN = 'refresh-token';
 export const USER_DATA = 'user-data';
-export const STRAPI_URL = 'https://strapi.paas.broodrooster.dev'
+export const API_URL = 'https://directus.paas.broodrooster.dev';

@@ -13,7 +13,7 @@
         {{ time }},
       </div>
 
-      <div class="text-5xl mt-3">{{ username }}</div>
+      <div class="text-5xl mt-3">{{ firstname }}</div>
     </section>
 
     <div class="mt-auto mb-10 flex flex-row flex-grow-0 justify-space-around">
@@ -51,10 +51,10 @@ import {USER_DATA} from "@/constants/settings";
 export default {
   name: 'Home',
   computed: {
-    username: () => {
+    firstname: () => {
       let json = localStorage.getItem(USER_DATA);
       let user = JSON.parse(json);
-      return user.username;
+      return user.first_name;
     },
     time: () => {
       let hour = Number.parseInt(new Date().toLocaleTimeString('nl').substr(0, 2));

@@ -1,57 +1,84 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
-import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
-import {AUTH_TOKEN} from "@/constants/settings";
+import { createHttpLink } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context';
+import { TokenRefreshLink } from 'apollo-link-token-refresh';
+import jwtDecode from "jwt-decode";
+import { ApolloLink } from "apollo-link";
+
+import { createApolloClient } from 'vue-cli-plugin-apollo/graphql-client'
+import {ACCESS_TOKEN, REFRESH_TOKEN, API_URL} from "@/constants/settings";
+
+
+const url = process.env.VUE_APP_GRAPHQL_HTTP || API_URL;
+const httpLink = createHttpLink({
+  uri: url + '/graphql',
+  credentials: "include"
+})
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem(ACCESS_TOKEN);
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+})
+
+const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN);
+
+const getRefeshToken = () => localStorage.getItem(REFRESH_TOKEN);
+
+const refreshTokenLink = new TokenRefreshLink({
+  accessTokenField: "access_token",
+  // Check if the current access token is valid
+  isTokenValidOrUndefined: () => {
+    const token = getAccessToken();
+
+    if (!token)
+      return true;
+
+    try{
+      const { exp } = jwtDecode(token);
+      return Date.now() < exp * 1000;
+    } catch {
+      return false;
+    }
+
+  },
+  // Fetch new access token
+  fetchAccessToken: () => {
+    console.log(process.env.VUE_APP_API_URI + '/test');
+    return fetch(url + '/auth/refresh', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        refresh_token: getRefeshToken()
+      })
+    });
+  },
+  // Set new access token
+  handleFetch: accessToken => {
+    localStorage.setItem(ACCESS_TOKEN, accessToken)
+  }
+})
+
 // Install the vue plugin
 Vue.use(VueApollo)
-
-// Http endpoint
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'https://strapi.paas.broodrooster.dev/graphql'
-
-// Config
-const defaultOptions = {
-  // You can use `https` for secure connection (recommended in production)
-  httpEndpoint,
-  // You can use `wss` for secure connection (recommended in production)
-  // Use `null` to disable subscriptions
-  wsEndpoint: null,
-  // LocalStorage token
-  tokenName: AUTH_TOKEN,
-  // Enable Automatic Query persisting with Apollo Engine
-  persisting: false,
-  // Use websockets for everything (no HTTP)
-  // You need to pass a `wsEndpoint` for this to work
-  websocketsOnly: false,
-  // Is being rendered on the server?
-  ssr: false,
-
-  // Override default apollo link
-  // note: don't override httpLink here, specify httpLink options in the
-  // httpLinkOptions property of defaultOptions.
-  // link: myLink
-
-  // Override default cache
-  // cache: myCache
-
-  // Override the way the Authorization header is set
-  // getAuth: (tokenName) => ...
-
-  // Additional ApolloClient options
-  // apollo: { ... }
-
-  // Client local data (see apollo-link-state)
-  // clientState: { resolvers: { ... }, defaults: { ... } }
-}
 
 // Call this in the Vue app file
 export function createProvider (options = {}) {
   // Create apollo client
   const { apolloClient, wsClient } = createApolloClient({
-    ...defaultOptions,
     ...options,
+    link: ApolloLink.from([refreshTokenLink, authLink, httpLink])
   })
   apolloClient.wsClient = wsClient
-
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
@@ -61,6 +88,7 @@ export function createProvider (options = {}) {
       },
     },
     errorHandler (error) {
+
       // eslint-disable-next-line no-console
       console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
     },
@@ -70,11 +98,11 @@ export function createProvider (options = {}) {
 }
 
 // Manually call this when user log in
-export async function onLogin (apolloClient, token) {
-  if (typeof localStorage !== 'undefined' && token) {
-    localStorage.setItem(AUTH_TOKEN, token)
+export async function onLogin (apolloClient, access_token, refresh_token) {
+  if (typeof localStorage !== 'undefined' && access_token) {
+    localStorage.setItem(ACCESS_TOKEN, access_token)
+    localStorage.setItem(REFRESH_TOKEN, refresh_token)
   }
-  if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
   try {
     await apolloClient.resetStore()
   } catch (e) {
@@ -86,9 +114,9 @@ export async function onLogin (apolloClient, token) {
 // Manually call this when user log out
 export async function onLogout (apolloClient) {
   if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem(AUTH_TOKEN)
+    localStorage.removeItem(ACCESS_TOKEN)
+    localStorage.removeItem(REFRESH_TOKEN)
   }
-  if (apolloClient.wsClient) restartWebsockets(apolloClient.wsClient)
   try {
     await apolloClient.resetStore()
   } catch (e) {
@@ -96,3 +124,4 @@ export async function onLogout (apolloClient) {
     console.log('%cError on cache reset (logout)', 'color: orange;', e.message)
   }
 }
+

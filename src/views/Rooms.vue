@@ -33,7 +33,7 @@ export default {
   apollo: {
     rooms: {
       query: gql`query{
-        rooms{
+        rooms {
             name
             location
             bookings {

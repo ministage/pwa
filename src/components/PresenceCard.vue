@@ -2,7 +2,7 @@
   <v-card elevation="0">
     <div class="d-flex flex-row ml-3" @click="show = !show" v-ripple>
       <v-avatar size="60" round class="my-auto">
-        <v-img :src="transformUrl(company.logo.url)" contain></v-img>
+        <v-img :src="transformUrl(company.logo.id)" contain></v-img>
       </v-avatar>
 
       <div>
@@ -19,10 +19,10 @@
 
           <div class="flex flex-row justify-space-between">
             <div class="flex flex-col ml-2.5">
-              <span class="text-xl font-weight-medium black--text">{{ employee.username }}</span>
+              <span class="text-xl font-weight-medium black--text">{{ employee.first_name + " " + employee.last_name }}</span>
               <span
-                  :style="'color: ' + (employee.presence.is_present ? '#9fdfba' : '#f26464')">
-          {{ employee.presence.is_present ? "aanwezig" : "afwezig" }}</span>
+                  :style="'color: ' + (employee.presence && employee.presence[0].is_present ? '#9fdfba' : '#f26464')">
+          {{ (employee.presence && employee.presence[0].is_present) ? "aanwezig" : "afwezig" }}</span>
 
             </div>
             <div class="flex flex-row justify-end">
@@ -57,7 +57,7 @@
 
 
 <script>
-import {STRAPI_URL} from "@/constants/settings";
+import {API_URL} from "@/constants/settings";
 
 export default {
   name: 'PresenceCard',
@@ -68,14 +68,14 @@ export default {
     company: Object,
   },
   methods: {
-    transformUrl: function (url) {
-      return STRAPI_URL + url;
+    transformUrl: function (id) {
+      return API_URL + '/assets/' + id;
     },
     countPresent: function (employees) {
-      return employees.filter(employee => employee.presence.is_present).length;
+      return employees.filter(employee => employee.presence[0]?.is_present).length;
     },
     countPresence: function (employees) {
-      return employees.filter(employee => employee.presence.is_present).length > 0;
+      return this.countPresent(employees) > 0;
     }
   }
 }

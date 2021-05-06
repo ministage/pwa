@@ -37,12 +37,13 @@ export default {
             name
             description
                 logo {
-                    url
+                   id
                 }
             employees{
                 id
-                username
-                presence{
+                first_name
+                last_name
+                presence {
                     is_present
                 }
             }
