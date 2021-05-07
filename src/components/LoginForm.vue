@@ -72,6 +72,9 @@ export default {
           this.$props.loginCallback(this.email, this.password);
         }
     },
+    gotoReset () {
+      this.$router.push('/password-reset')
+    }
   }
 }
 </script>

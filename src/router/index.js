@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import {ACCESS_TOKEN} from "@/constants/settings";
+import PasswordReset from "@/views/PasswordReset";
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,14 @@ const routes = [
     }
   },
   {
+    path: '/password-reset',
+    name: 'PasswordReset',
+    component: PasswordReset,
+    meta: {
+      guest: true
+    }
+  },
+  {
     path: '/reserveinformation',
     name: 'ReserveInformation',
     component: () => import('../views/ReserveInformation.vue'),
@@ -64,6 +73,14 @@ const routes = [
     component: () => import('../views/ReserveConfirmation.vue'),
     meta: {
       requiresAuth: true,
+    }
+  },
+  {
+    path: '/more',
+    name: 'More',
+    component: () => import('../views/More'),
+    meta: {
+      requiresAuth: true
     }
   }
 ]

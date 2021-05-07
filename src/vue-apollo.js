@@ -25,9 +25,9 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
-const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN);
+export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN);
 
-const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN);
+export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN);
 
 const refreshTokenLink = new TokenRefreshLink({
   accessTokenField: 'data',
