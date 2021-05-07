@@ -7,9 +7,12 @@
           elevation="0"
           color="secondary"
           style="color: black;"
-          class="text-none font-weight-regula ml-48 mt-48 mb-4"
+          class="text-none font-weight-regula mb-4"
           large
           to="/reserve"
+          absolute
+          right
+          bottom
       >Reserveer ruimte
       </v-btn>
     </v-img>

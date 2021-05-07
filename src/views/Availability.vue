@@ -2,10 +2,10 @@
   <div>
     <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
     <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center">
-      <span class="mt-auto mb-auto mr-3 text-h5 font-weight-bold">Ik ben:</span>
+      <span class="mt-auto mb-auto mr-3 text-2xl font-weight-bold">Ik ben:</span>
       <PresenceToggle class="mt-auto mb-auto " :enabled="$apollo.queries.users_me.loading ? true : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
-    <div class="text-body-1 mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
+    <div class="text-xl mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row
         dense
         class="mx-0.5"
@@ -65,6 +65,7 @@ export default {
         let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
+      pollInterval: 1000
     },
   },
   name: 'Home',
