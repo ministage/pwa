@@ -37,6 +37,7 @@ export default {
             name
             location
             bookings {
+                date
                 to
                 from
             }

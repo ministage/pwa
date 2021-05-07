@@ -68,7 +68,7 @@ const routes = [
     }
   },
   {
-    path: '/reserveconfirmation',
+    path: '/reserveconfirmation/:id',
     name: 'ReserveConfirmation',
     component: () => import('../views/ReserveConfirmation.vue'),
     meta: {

@@ -30,13 +30,16 @@ export default {
   },
   computed: {
     taken() {
-      let currentBooking = this.room.bookings.find(booking => Date.now() > new Date(booking.from) && Date.now() < new Date(booking.to));
+      let currentBooking = this.room.bookings.find(booking => Date.now() > this.timeToDate(booking.date, booking.from) && Date.now() < this.timeToDate(booking.date, booking.to));
       return currentBooking !== undefined;
     },
     takenTill(){
-      let currentBooking = this.room.bookings.find(booking => Date.now() > new Date(booking.from) && Date.now() < new Date(booking.to));
-      return currentBooking ? new Date(currentBooking.to).toLocaleTimeString('nl-NL').substr(0, 5) : undefined
+      let currentBooking = this.room.bookings.find(booking => Date.now() > this.timeToDate(booking.date, booking.from) && Date.now() < this.timeToDate(booking.date, booking.to));
+      return currentBooking ? this.timeToDate(currentBooking.date, currentBooking.to).toLocaleTimeString('nl-NL').substr(0, 5) : undefined
     },
   },
+  methods: {
+    timeToDate: (date,time) => new Date(`${date}T${time}`)
+  }
 }
 </script>

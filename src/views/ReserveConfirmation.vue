@@ -7,15 +7,30 @@
       <div class="flex flex-col mt-3 mr-4">
         <div class="flex flex-row mr-20 m-3">
           <v-icon class="mr-2">mdi-calendar-blank-outline</v-icon>
-          Dag
+          <v-skeleton-loader
+              v-if="$apollo.queries.booking.loading"
+              type="text@3"
+              loading
+          ></v-skeleton-loader>
+          <span v-else>{{ booking.date }}</span>
         </div>
         <div class="flex flex-row m-3">
           <v-icon class="mr-2">mdi-clock-time-eight-outline</v-icon>
-          Tijd
+          <v-skeleton-loader
+              v-if="$apollo.queries.booking.loading"
+              type="text@3"
+              loading
+          ></v-skeleton-loader>
+          <span v-else>{{ booking.from }} - {{ booking.to }}</span>
         </div>
         <div class="flex flex-row m-3">
           <v-icon class="mr-2">mdi-home-outline</v-icon>
-          Waar
+          <v-skeleton-loader
+              v-if="$apollo.queries.booking.loading"
+              type="text@3"
+              loading
+          ></v-skeleton-loader>
+          <span v-else>{{ booking.room.name }}</span>
         </div>
       </div>
     </div>
@@ -26,10 +41,37 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
+import gql from "graphql-tag";
 
 export default {
-  name: "ReserveCongratulations",
-  components: {PageHeader}
+  name: "ReserveConfirmation",
+  components: {PageHeader},
+  computed: {
+    id() {
+      return this.$route.params.id;
+    }
+  },
+  apollo: {
+    booking: {
+      query: gql`
+        query($id: ID!){
+          bookings_by_id(id: $id){
+            date
+            from
+            to
+            room {
+              name
+            }
+          }
+        }`,
+      variables() {
+        return {
+          id: this.$route.params.id
+        }
+      },
+      update: data => data.bookings_by_id
+    }
+  }
 }
 </script>
 

@@ -33,17 +33,18 @@
 
 
     <v-calendar
-        class="pt-3"
+        class="pt-3 align-content-start mr-4"
         type="day"
         hide-header
-        style="max-height: 30rem"
         locale="nl"
-        first-time="8:00"
+        first-time="7:00"
         interval-count="12"
-        interval-height="50"
+        interval-height="35"
         :interval-format="intervalFormatter"
-        v-model="value"
         ref="calendar"
+        :events="events"
+        event-color="accent"
+        event-overlap-mode="column"
     >
       <template #day-body="{ date, week }">
         <div
@@ -55,7 +56,7 @@
 
     </v-calendar>
     <v-fab-transition
-    origin="center center">
+        origin="center center">
       <v-btn
           color="secondary"
           dark
@@ -74,6 +75,7 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
+import gql from "graphql-tag";
 
 export default {
   components: {
@@ -83,6 +85,39 @@ export default {
     this.ready = true
     this.scrollToTime()
     this.updateTime()
+  },
+  apollo: {
+    events: {
+      query: gql`query {
+        bookings {
+          date
+          to
+          from
+          description
+          room {
+            location
+          }
+          user {
+            company {
+              name
+            }
+          }
+        }
+      }`,
+      update: data => {
+        return data.bookings.map(booking => {
+          console.log(booking);
+          return {
+            location: booking.room.location,
+            name: booking.user.company.name + ` -
+            ` + booking.room.location,
+            start: `${booking.date} ${booking.from}`,
+            end: `${booking.date} ${booking.to}`,
+          };
+        });
+      },
+      pollInterval: 1000
+    }
   },
   methods: {
     intervalFormatter(locale) {
@@ -113,6 +148,7 @@ export default {
     return {
       ready: false,
       value: '',
+      bookings: [],
       days: [
         {
           name: "Zo",

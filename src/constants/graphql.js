@@ -16,3 +16,11 @@ export const PRESENCE_MUTATUTION = gql`
         }
     }
 `;
+
+export const CREATE_BOOKING_MUTATION = gql`
+    mutation($date: Date!, $from: String!, $to: String!, $description: String!, $user: String!, $room: String!){
+        create_bookings_item(data: {date: $date, from: $from, to: $to, description: $description, user: $user, room: $room}){
+            id
+        }
+    }
+`
