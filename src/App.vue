@@ -43,6 +43,7 @@ export default {
       return this.$route.path
     }
   },
+  mixins: [update],
   data: () => ({
     buttons: [
       {
