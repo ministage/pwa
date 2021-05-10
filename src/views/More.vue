@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-full">
     <PageHeader icon="mdi-account-outline" name="Meer"></PageHeader>
     <v-card class="h-full">
       <v-list dense>
@@ -32,6 +32,15 @@ export default {
   data() {
     return {
       parts: [
+        {
+          name: 'Beheer',
+          buttons: [
+            {
+              name: 'Naar beheer-pagina',
+              icon: 'mdi-account-supervisor'
+            }
+          ]
+        },
         {
           name: 'Account',
           buttons: [

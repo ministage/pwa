@@ -2,10 +2,10 @@
   <div class="p-4 d-flex flex-col xl:flex-row justify-between h-full" style="background-color: #e0bfbf;">
     <div>
         <v-img width="40%" :aspect-ratio="125/62" class="self-center ml-1" :src="require('../assets/California_Logo.svg')"></v-img>
-        <v-img width="55%" class="ml-auto mr-auto" :src="require('../assets/hoofd.png')"></v-img>
     </div>
-    <div class="mt-auto xl:ml-auto xl:mr-auto">
-      <h4 class="text-h5 mb-3">Om te beginnen, <br>log in met je account</h4>
+    <v-img class="ml-auto mr-auto max-h-32 xs:max-h-60" :src="require('../assets/hoofd.png')" contain></v-img>
+    <div class="xl:ml-auto xl:mr-auto">
+      <h4 class="text-xl mb-3">Om te beginnen, <br>log in met je account</h4>
       <LoginForm :login-callback="login"></LoginForm>
     </div>
   </div>

@@ -10,6 +10,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      screens: {
+        'xs': '375px',
+        // => @media (min-width: 375px) { ... }
+      },
       // eslint-disable-next-line no-unused-vars
       backgroundImage: theme =>
         process.env.NODE_ENV === 'production' ? {

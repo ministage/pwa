@@ -3,42 +3,43 @@
     <header>
       <v-img :transition="false" width="40%" :aspect-ratio="125/62" class="self-center mt-2 ml-2"
              :src="require('../assets/California_Logo.svg')"></v-img>
-      <v-img :transition="false" height="300" class="ml-auto mr-auto mt-5" :src="require('../assets/hoofd.png')"
-             contain></v-img>
     </header>
 
-    <section class="mt-6 ml-4">
-
-      <div class="text-5xl font-extrabold">
+    <section class="mt-auto mb-auto">
+      <v-img :transition="false" class="ml-auto mr-auto mt-5" max-height="200" :src="require('../assets/hoofd.png')"
+             contain></v-img>
+      <div class="text-4xl sm:text-3xl mt-3 font-extrabold">
         {{ time }},
       </div>
 
-      <div class="text-5xl mt-3">{{ firstname }}</div>
+      <div class="text-4xl mt-3">{{ firstname }}</div>
     </section>
+      <div class="flex flex-row  flex-grow-0 flex-wrap justify-space-around align-end" style="max-height: max-content">
+        <v-btn
+            rounded
+            color="#ebd2d2"
+            elevation="2"
+            class="text-none tracking-tight text-2xl font-medium"
+            large
+            to="/rooms"
+        >
+          Reserveer een ruimte
+        </v-btn>
 
-    <div class="mt-auto mb-10 flex flex-row flex-grow-0 justify-space-around">
-      <v-btn
-          rounded
-          color="#ebd2d2"
-          elevation="2"
-          class="text-none text-subtitle-1"
-          large
-          to="/rooms"
-      >
-        Reserveer een ruimte
-      </v-btn>
+        <v-btn
+            rounded
+            elevation="2"
+            color="#ebd2d2"
+            class="text-none tracking-tight text-2xl font-medium mt-2"
+            large
+            to="/availability"
+        >
+          Aanwezigheid
+        </v-btn>
+      </div>
 
-      <v-btn
-          rounded
-          elevation="2"
-          color="#ebd2d2"
-          class="text-none text-subtitle-1"
-          large
-          to="/availability"
-      >
-        Aanwezigheid
-      </v-btn>
-    </div>
+
+
 
 
   </div>

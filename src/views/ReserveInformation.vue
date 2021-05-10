@@ -1,8 +1,17 @@
 <template>
-  <div>
+  <div class="flex flex-col">
     <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
-    <v-form class="flex flex-col mt-16 align-center" ref="form">
-      <v-text-field rounded outlined class="w-10/12" dense :loading="$apollo.queries.users_me.loading" :value="$apollo.queries.users_me.loading ? '' : users_me.company.name" readonly></v-text-field>
+    <v-form class="flex flex-col align-center mt-3" ref="form">
+      <v-text-field
+          rounded
+          outlined
+          class="w-10/12"
+          dense
+          :loading="$apollo.queries.users_me.loading"
+          :value="$apollo.queries.users_me.loading ? '' : users_me.company.name"
+          readonly
+          label="Bedrijf"
+      ></v-text-field>
       <v-text-field v-model="date" rounded outlined class="w-10/12" label="Datum" required type="date"
                     dense></v-text-field>
       <v-text-field v-model="from" rounded outlined class="w-10/12" label="Starttijd" required type="time"

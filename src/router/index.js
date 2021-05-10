@@ -56,7 +56,7 @@ const routes = [
     name: 'PasswordReset',
     component: PasswordReset,
     meta: {
-      guest: true
+      guest: true,
     }
   },
   {

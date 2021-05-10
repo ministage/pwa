@@ -1,8 +1,8 @@
 <template>
-  <div class="h-full flex flex-col">
+  <div class="h-full flex flex-col" style="background-color: #e0bfbf;">
     <PageHeader class="max-h-16" icon="mdi-lock-reset" name="Wachtwoord resetten"></PageHeader>
     <v-card class="mt-auto mb-auto">
-      <v-card-title>Stuur een wachtwoord reset link</v-card-title>
+      <v-card-title class="text-xl">Stuur een wachtwoord reset link</v-card-title>
       <v-card-text>
         <v-text-field
           label="Email"
@@ -18,7 +18,7 @@
           @click="sendLink"
           :loading="loading"
           rounded
-
+          class="text-none"
         >
         Stuur mij een link
         </v-btn>

@@ -6,7 +6,7 @@
       </v-avatar>
 
       <div>
-        <v-card-title>{{ company.name }}</v-card-title>
+        <v-card-title class="font-semibold text-base tracking-tight">{{ company.name }}</v-card-title>
         <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#f26262')">
           {{ countPresent(company.employees) }} aanwezig
         </v-card-subtitle>
@@ -19,7 +19,7 @@
 
           <div class="flex flex-row justify-space-between">
             <div class="flex flex-col ml-2.5">
-              <span class="text-xl font-weight-medium black--text">{{ employee.first_name + " " + employee.last_name }}</span>
+              <span class="text-xl font-semibold black--text">{{ employee.first_name + " " + employee.last_name }}</span>
               <span
                   :style="'color: ' + (employee.is_present ? '#9fdfba' : '#f26464')">
           {{ (employee.is_present) ? "aanwezig" : "afwezig" }}</span>
@@ -80,3 +80,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.font-semibold {
+  font-weight: 600 !important;
+}
+.text-base {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+  letter-spacing: -0.025em;
+}
+</style>
