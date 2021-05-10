@@ -6,7 +6,7 @@
       </v-avatar>
 
       <div>
-        <v-card-title class="font-semibold text-base tracking-tight">{{ company.name }}</v-card-title>
+        <v-card-title class="font-semibold text-base tracking-tight truncate">{{ company.name }}</v-card-title>
         <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#f26262')">
           {{ countPresent(company.employees) }} aanwezig
         </v-card-subtitle>

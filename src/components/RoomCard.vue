@@ -4,15 +4,12 @@
       <v-list-item three-line>
         <v-list-item-content class="ml-3 mt-1">
           <v-list-item-title class="font-bold">{{ room.name }}</v-list-item-title>
-          <v-list-item-subtitle class="text-subtitle-1" style="color: black">{{ room.location }}</v-list-item-subtitle>
-          <v-list-item-subtitle class="mt-2">
+          <v-list-item-subtitle class="text-subtitle-1 pb-2" style="color: black">{{ room.location }}</v-list-item-subtitle>
+          <v-list-item-subtitle class="">
             <span :style="'color: ' + (taken ? '#f26262' :'#87d7a9')">{{ taken ? 'Nu bezet' : 'Nu beschikbaar' }}</span>
             <span class="ml-3">{{ taken ? ('Beschikbaar na ' + takenTill) : "" }}</span>
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-list-item-action>
-
-        </v-list-item-action>
       </v-list-item>
     </v-theme-provider>
     <v-divider></v-divider>
