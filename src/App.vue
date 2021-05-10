@@ -6,6 +6,13 @@
       </v-container>
     </v-main>
 
+    <v-snackbar bottom right :value="updateExists" :timeout="0" color="primary">
+      Er is een update beschikbaar
+      <v-btn text @click="refreshApp">
+        Update
+      </v-btn>
+    </v-snackbar>
+
     <v-bottom-navigation app v-if="!this.$route.meta.guest"
     >
       <v-btn
@@ -27,6 +34,7 @@
 </template>
 
 <script>
+import update from './mixins/update'
 
 export default {
   name: 'App',
