@@ -5,6 +5,7 @@
       <v-btn
           text
           class="text-none font-weight-bold"
+          @click="backWeek"
       >
         <v-icon left size="24">mdi-arrow-left</v-icon>
         Week
@@ -23,45 +24,31 @@
     </div>
     <div class="flex flex-row justify-space-between mt-2 mb-4 h-16">
       <div class="flex flex-col align-center rounded"
-           v-for="day in days" :key="day.date" v-ripple
+           v-for="day in weekDays" :key="day.date" v-ripple
+           @click="setDate(day.data)"
       >
-        <span class="text-none align-start font-weight-bold">{{ day.name }}</span>
+        <span class="text-none align-start font-weight-bold text-capitalize">{{ day.name }}</span>
         <span id="span1"
               :class="'rounded-circle font-weight-bold ' + (day.date === selectedDate.date() ? 'selected' : '')"
         >{{ day.date }}</span>
       </div>
     </div>
 
-
-    <v-calendar
-        class="pt-3 align-content-start mr-4"
-        type="day"
-        hide-header
-        locale="nl"
-        first-time="7:00"
-        interval-count="12"
-        interval-height="35"
-        :interval-format="intervalFormatter"
-        ref="calendar"
-        :events="events"
-        event-color="accent"
-        event-overlap-mode="column"
-    >
-      <template #day-body="{ date, week }">
-        <div
-            class="v-current-time"
-            :class="{ first: date === week[0].date }"
-            :style="{ top: nowY }"
-        ></div>
+    <FullCalendar ref="calendar" :options="calendarOptions">
+      <template #eventContent="{ timeText, event }">
+        <span>{{ event.extendedProps.location }}</span>
+        <br>
+        <b class="truncate">{{ event.extendedProps.company }}</b>
       </template>
+    </FullCalendar>
 
-    </v-calendar>
+
     <v-fab-transition
         origin="center center">
       <v-btn
           color="secondary"
           dark
-          absolute
+          fixed
           bottom
           right
           fab
@@ -93,67 +80,65 @@ export default {
     PageHeader,
     FullCalendar
   },
-  mounted() {
-    this.ready = true
-    this.scrollToTime()
-    this.updateTime()
-  },
-  apollo: {
-    events: {
-      query: gql`query {
-        bookings {
-          date
-          to
-          from
-          description
-          room {
-            location
-          }
-          user {
-            company {
-              name
+  methods: {
+    getEvents(fetchInfo, successCallback, failureCallback) {
+      this.$apollo.query({
+        query: gql`query {
+          bookings {
+            date
+            to
+            from
+            description
+            room {
+              location
+            }
+            user {
+              company {
+                name
+              }
             }
           }
-        }
-      }`,
-      update: data => {
-        return data.bookings.map(booking => {
-          console.log(booking);
-          return {
-            location: booking.room.location,
-            name: booking.user.company.name + ` -
-            ` + booking.room.location,
-            start: `${booking.date} ${booking.from}`,
-            end: `${booking.date} ${booking.to}`,
-          };
-        });
-      },
-      pollInterval: 1000
+        }`
+      }).then((response) => {
+            successCallback(response.data.bookings.map(booking => {
+              return {
+                company: booking.user.company.name,
+                location: booking.room.location,
+                start: `${booking.date}T${booking.from}`,
+                end: `${booking.date}T${booking.to}`,
+              };
+            }));
+          },
+          (error) => {
+            failureCallback(error)
+          });
+    },
+    setDate(date){
+      this.selectedDate = date;
+      this.$refs.calendar.getApi().gotoDate(this.selectedDate.toDate());
+    },
+    backWeek(){
+      this.setDate(this.selectedDate.subtract(1, 'week'));
+    },
+    nextWeek(){
+      this.setDate(this.selectedDate.add(1, 'week'));
     }
   },
-  methods: {
-    intervalFormatter(locale) {
-      return locale.time;
-    },
-    getCurrentTime() {
-      return this.cal ? this.cal.times.now.hour * 60 + this.cal.times.now.minute : 0
-    },
-    scrollToTime() {
-      const time = this.getCurrentTime()
-      const first = Math.max(0, time - (time % 30) - 30)
-
-      this.cal.scrollToTime(first)
-    },
-    updateTime() {
-      setInterval(() => this.cal.updateTimes(), 60 * 1000)
-    },
-  },
   computed: {
-    cal() {
-      return this.ready ? this.$refs.calendar : null
+    currentMonth(){
+      return this.selectedDate.locale('nl').format('MMMM');
     },
-    nowY() {
-      return this.cal ? this.cal.timeToY(this.cal.times.now) + 'px' : '-10px'
+    weekDays(){
+      let days = [];
+      for(let i = 0; i < 7; i++){
+        let day = this.selectedDate.day(i);
+        days.push({
+          name: day.format('dd'),
+          date: day.date(),
+          data: day
+        })
+      }
+      return days;
     },
   },
   data() {
@@ -198,7 +183,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .selected {
   background-color: #e0bfbf;
 }
@@ -229,5 +214,11 @@ export default {
     margin-top: -5px;
     margin-left: -6.5px;
   }
+}
+
+.fc-day-today {
+  background: #FFF !important;
+  border: none !important;
+  border-top: 1px solid #ddd !important;
 }
 </style>
