@@ -11,7 +11,7 @@
         Week
       </v-btn>
 
-      <span class="font-extrabold text-xl text-capitalize">{{this.currentMonth}}</span>
+      <span class="font-extrabold text-xl text-capitalize">{{ this.currentMonth }}</span>
 
       <v-btn
           text
@@ -36,9 +36,8 @@
 
     <FullCalendar ref="calendar" :options="calendarOptions">
       <template #eventContent="{ timeText, event }">
-        <span>{{ event.extendedProps.location }}</span>
-        <br>
-        <b class="truncate">{{ event.extendedProps.company }}</b>
+        <span class="block black--text">{{ event.extendedProps.location }}</span>
+        <b class="block truncate black--text">{{ event.extendedProps.company }}</b>
       </template>
     </FullCalendar>
 
@@ -70,6 +69,7 @@ import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import localeData from 'dayjs/plugin/localeData';
 import 'dayjs/locale/nl';
+
 dayjs.extend(localeData)
 dayjs.extend(updateLocale)
 dayjs.locale('nl');
@@ -79,6 +79,14 @@ export default {
   components: {
     PageHeader,
     FullCalendar
+  },
+  mounted() {
+    this.interval = setInterval(function () {
+      this.$refs.calendar.getApi().refetchEvents()
+    }.bind(this), 5000);
+  },
+  destroyed() {
+    clearInterval(this.interval)
   },
   methods: {
     getEvents(fetchInfo, successCallback, failureCallback) {
@@ -98,7 +106,8 @@ export default {
               }
             }
           }
-        }`
+        }`,
+        fetchPolicy: "network-only"
       }).then((response) => {
             successCallback(response.data.bookings.map(booking => {
               return {
@@ -113,24 +122,24 @@ export default {
             failureCallback(error)
           });
     },
-    setDate(date){
+    setDate(date) {
       this.selectedDate = date;
       this.$refs.calendar.getApi().gotoDate(this.selectedDate.toDate());
     },
-    backWeek(){
+    backWeek() {
       this.setDate(this.selectedDate.subtract(1, 'week'));
     },
-    nextWeek(){
+    nextWeek() {
       this.setDate(this.selectedDate.add(1, 'week'));
     }
   },
   computed: {
-    currentMonth(){
+    currentMonth() {
       return this.selectedDate.locale('nl').format('MMMM');
     },
-    weekDays(){
+    weekDays() {
       let days = [];
-      for(let i = 0; i < 7; i++){
+      for (let i = 0; i < 7; i++) {
         let day = this.selectedDate.day(i);
         days.push({
           name: day.format('dd'),
@@ -143,28 +152,25 @@ export default {
   },
   data() {
     return {
+      interval: null,
       selectedDate: dayjs(new Date()),
       calendarOptions: {
         plugins: [timeGridPlugin],
         initialView: 'timeGridDay',
         nowIndicator: true,
         eventSources: [
-            this.getEvents
+          this.getEvents
         ],
         allDaySlot: false,
         dayHeaders: false,
         headerToolbar: false,
         lazyFetching: false,
         height: "auto",
-        eventColor: '#f4e9e9',
-        eventTextColor: '#000000',
-        eventClassNames: function (event) {
-          console.log(event);
-          return [];
-        },
+        //eventColor: '#f4e9e9',
+        //eventTextColor: '#000000',
         slotEventOverlap: false,
         businessHours: {
-          daysOfWeek: [1,2,3,4,5],
+          daysOfWeek: [1, 2, 3, 4, 5],
           startTime: '8:00',
           endTime: '19:00',
         },
@@ -221,4 +227,25 @@ export default {
   border: none !important;
   border-top: 1px solid #ddd !important;
 }
+
+.fc-v-event {
+  color: black !important;
+}
+
+div[style*="z-index: 1"] > .fc-v-event {
+  background-color: #f4e9e9 !important;
+  border-color: #f4e9e9 !important;
+}
+
+div[style*="z-index: 2"] > .fc-v-event {
+  background-color: #ebd2d2 !important;
+  border-color: #ebd2d2 !important;
+}
+
+div[style*="z-index: 3"] > .fc-v-event {
+  background-color: #d6b1b1 !important;
+  border-color: #d6b1b1 !important;
+}
+
+
 </style>
