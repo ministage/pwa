@@ -10,11 +10,12 @@
         Week
       </v-btn>
 
-      <span class="font-extrabold text-xl">April</span>
+      <span class="font-extrabold text-xl text-capitalize">{{this.currentMonth}}</span>
 
       <v-btn
           text
           class="text-none font-weight-bold"
+          @click="nextWeek"
       >
         Week
         <v-icon right size="24">mdi-arrow-right</v-icon>
@@ -26,7 +27,7 @@
       >
         <span class="text-none align-start font-weight-bold">{{ day.name }}</span>
         <span id="span1"
-              :class="'rounded-circle font-weight-bold ' + (day.date === 28 ? 'selected' : '')"
+              :class="'rounded-circle font-weight-bold ' + (day.date === selectedDate.date() ? 'selected' : '')"
         >{{ day.date }}</span>
       </div>
     </div>
@@ -76,10 +77,21 @@
 <script>
 import PageHeader from "@/components/PageHeader";
 import gql from "graphql-tag";
+import FullCalendar from '@fullcalendar/vue'
+import timeGridPlugin from '@fullcalendar/timegrid';
+import dayjs from 'dayjs';
+import updateLocale from 'dayjs/plugin/updateLocale';
+import localeData from 'dayjs/plugin/localeData';
+import 'dayjs/locale/nl';
+dayjs.extend(localeData)
+dayjs.extend(updateLocale)
+dayjs.locale('nl');
+
 
 export default {
   components: {
-    PageHeader
+    PageHeader,
+    FullCalendar
   },
   mounted() {
     this.ready = true
@@ -146,38 +158,40 @@ export default {
   },
   data() {
     return {
-      ready: false,
-      value: '',
-      bookings: [],
-      days: [
-        {
-          name: "Zo",
-          date: 26
+      selectedDate: dayjs(new Date()),
+      calendarOptions: {
+        plugins: [timeGridPlugin],
+        initialView: 'timeGridDay',
+        nowIndicator: true,
+        eventSources: [
+            this.getEvents
+        ],
+        allDaySlot: false,
+        dayHeaders: false,
+        headerToolbar: false,
+        lazyFetching: false,
+        height: "auto",
+        eventColor: '#f4e9e9',
+        eventTextColor: '#000000',
+        eventClassNames: function (event) {
+          console.log(event);
+          return [];
         },
-        {
-          name: "Ma",
-          date: 27
-        }, {
-          name: "Di",
-          date: 28
+        slotEventOverlap: false,
+        businessHours: {
+          daysOfWeek: [1,2,3,4,5],
+          startTime: '8:00',
+          endTime: '19:00',
         },
-        {
-          name: "Wo",
-          date: 29
-        },
-        {
-          name: "Do",
-          date: 30
-        },
-        {
-          name: "Vr",
-          date: 31
-        },
-        {
-          name: "Za",
-          date: 1
+        slotMinTime: '8:00',
+        slotMaxTime: '19:00',
+        locale: 'nl',
+        slotLabelFormat: {
+          hour: 'numeric',
+          minute: '2-digit',
+          meridiem: 'short'
         }
-      ]
+      },
     }
   },
 
