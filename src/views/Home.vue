@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #e0bfbf;" class="h-full p-4 flex flex-col justify-between">
+  <div style="background-color: #e0bfbf;" class="h-full p-3 flex flex-col justify-between">
     <header>
       <v-img :transition="false" width="40%" :aspect-ratio="125/62" class="self-center mt-2 ml-2"
              :src="require('../assets/California_Logo.svg')"></v-img>

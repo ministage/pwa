@@ -6,9 +6,17 @@
       </v-container>
     </v-main>
 
-    <v-snackbar bottom right :value="updateExists" :timeout="0" color="primary">
+    <v-snackbar
+        bottom
+        light
+        :value="updateExists"
+        :timeout="-1"
+        color="secondary"
+        width="80%"
+        class="pl-2"
+    >
       Er is een update beschikbaar
-      <v-btn text @click="refreshApp">
+      <v-btn class="text-none" color="primary" @click="refreshApp">
         Update
       </v-btn>
     </v-snackbar>
