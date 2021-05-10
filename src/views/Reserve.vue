@@ -233,18 +233,24 @@ export default {
 }
 
 div[style*="z-index: 1"] > .fc-v-event {
-  background-color: #f4e9e9 !important;
-  border-color: #f4e9e9 !important;
+  background-color: #e8d2d2 !important;
+  border-color: #e8d2d2 !important;
 }
 
 div[style*="z-index: 2"] > .fc-v-event {
-  background-color: #ebd2d2 !important;
-  border-color: #ebd2d2 !important;
+  background-color: #d6b1b1 !important;
+  border-color: #d6b1b1 !important;
 }
 
 div[style*="z-index: 3"] > .fc-v-event {
-  background-color: #d6b1b1 !important;
-  border-color: #d6b1b1 !important;
+  background-color: #c49090 !important;
+  border-color: #c49090 !important;
+}
+
+div[style*="z-index: 4"] > .fc-v-event {
+  background-color: #bc7f7f !important;
+  border-color: #bc7f7f !important;
+
 }
 
 
