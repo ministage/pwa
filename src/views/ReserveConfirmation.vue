@@ -34,8 +34,8 @@
         </div>
       </div>
     </div>
-      <v-btn color="secondary" class="w-10/12 ml-auto mr-auto mb-4" rounded>Delen</v-btn>
-      <v-btn color="primary" class="w-10/12 ml-auto mr-auto mb-2" rounded to="/rooms">Terug naar ruimtes</v-btn>
+    <v-btn color="secondary" class="w-10/12 ml-auto mr-auto mb-4" rounded>Delen</v-btn>
+    <v-btn color="primary" class="w-10/12 ml-auto mr-auto mb-2" rounded to="/rooms">Terug naar ruimtes</v-btn>
   </div>
 </template>
 
@@ -59,6 +59,7 @@ export default {
             date
             from
             to
+            description
             room {
               name
             }
@@ -68,10 +69,13 @@ export default {
         return {
           id: this.$route.params.id
         }
-      },
+      }
+      ,
       update: data => data.bookings_by_id
     }
+    ,
   }
+  ,
 }
 </script>
 
