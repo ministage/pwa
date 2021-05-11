@@ -38,7 +38,7 @@
                 item-text="name" item-value="id" dense :rules="[rules.required]"></v-select>
       <v-text-field v-model="description" rounded outlined class="w-10/12" label="Opmerking" required
                     dense :rules="[rules.required]"></v-text-field>
-      <v-btn color="primary" class="w-10/12" rounded @click="makeBooking" :disabled="canBeBooked">
+      <v-btn color="primary" class="w-10/12" rounded @click="makeBooking">
         Reservering plaatsen
       </v-btn>
 
