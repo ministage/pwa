@@ -69,6 +69,8 @@ import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import localeData from 'dayjs/plugin/localeData';
 import 'dayjs/locale/nl';
+import Swal from "sweetalert2";
+import {API_URL} from "@/constants/settings";
 
 dayjs.extend(localeData)
 dayjs.extend(updateLocale)
@@ -89,6 +91,9 @@ export default {
     clearInterval(this.interval)
   },
   methods: {
+    transformUrl(id) {
+      return API_URL + '/assets/' + id;
+    },
     getEvents(fetchInfo, successCallback, failureCallback) {
       this.$apollo.query({
         query: gql`query {
@@ -98,11 +103,17 @@ export default {
             from
             description
             room {
+              name
               location
             }
             user {
+              first_name
+              last_name
               company {
                 name
+                logo {
+                  id
+                  }
               }
             }
           }
@@ -115,6 +126,13 @@ export default {
                 location: booking.room.location,
                 start: `${booking.date}T${booking.from}`,
                 end: `${booking.date}T${booking.to}`,
+                from: booking.from,
+                to: booking.to,
+                description: booking.description,
+                first_name: booking.user.first_name,
+                last_name: booking.user.last_name,
+                room: booking.room,
+                logo: booking.user.company.logo.id,
               };
             }));
           },
@@ -166,8 +184,6 @@ export default {
         headerToolbar: false,
         lazyFetching: false,
         height: "auto",
-        //eventColor: '#f4e9e9',
-        //eventTextColor: '#000000',
         slotEventOverlap: false,
         businessHours: {
           daysOfWeek: [1, 2, 3, 4, 5],
@@ -181,11 +197,25 @@ export default {
           hour: 'numeric',
           minute: '2-digit',
           meridiem: 'short'
-        }
+        },
+        eventClick: function (info) {
+          let event = info.event;
+          Swal.fire({
+                imageUrl: API_URL + '/assets/' + event.extendedProps.logo,
+                title: event.extendedProps.description,
+                html: "van " + event.extendedProps.from.substr(0, 5)  + " tot " + event.extendedProps.to.substr(0, 5)
+                    + "<br>" + "door " + event.extendedProps.first_name + " " + event.extendedProps.last_name
+                    + " in " + event.extendedProps.room.name + " op de " + event.extendedProps.location,
+                icon: 'info',
+                confirmButtonColor: "#29415d",
+                confirmButtonText: "Oke!",
+                iconColor: "#e0bfbf",
+              }
+          )
+        },
       },
     }
-  },
-
+  }
 }
 </script>
 
