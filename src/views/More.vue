@@ -24,7 +24,7 @@
 <script>
 import PageHeader from "@/components/PageHeader";
 import {onLogout} from "@/vue-apollo";
-import {USER_DATA} from "@/constants/settings";
+import {API_URL, USER_DATA} from "@/constants/settings";
 import {directus} from "@/main";
 
 export default {
@@ -37,7 +37,8 @@ export default {
           buttons: [
             {
               name: 'Naar beheer-pagina',
-              icon: 'mdi-account-supervisor'
+              icon: 'mdi-account-supervisor',
+              method: this.gotoAdmin
             }
           ]
         },
@@ -60,6 +61,9 @@ export default {
         await onLogout(this.$apollo.getClient());
         localStorage.removeItem(USER_DATA);
         await this.$router.push('/login');
+    },
+    gotoAdmin(){
+      window.open(API_URL);
     }
   },
   components: {PageHeader}

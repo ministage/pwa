@@ -57,8 +57,7 @@
 
 
 <script>
-import {API_URL} from "@/constants/settings";
-
+import {transformUrl} from "@/utils/image";
 export default {
   name: 'PresenceCard',
   data: () => ({
@@ -68,9 +67,7 @@ export default {
     company: Object,
   },
   methods: {
-    transformUrl: function (id) {
-      return API_URL + '/assets/' + id;
-    },
+    transformUrl: transformUrl,
     countPresent: function (employees) {
       return employees.filter(employee => employee.is_present).length;
     },
