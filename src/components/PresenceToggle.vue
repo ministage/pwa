@@ -1,13 +1,9 @@
 <template>
   <div class="rounded-pill flex flex-row flex-grow-0 align-center" :class="button_style" @click="onClick">
-    <v-fade-transition hide-on-leave>
     <span v-if="enabled" class="ml-3 mr-2">Aanwezig</span>
-    </v-fade-transition>
     <div :class="'h-12 w-12 mt-1 mb-1 ' + (enabled ? 'mr-1' : 'ml-1')"
          style="background-color: white; border-radius: 50%"></div>
-    <v-fade-transition hide-on-leave>
-      <span v-if="!enabled" class="mr-6 ml-2">Afwezig</span>
-    </v-fade-transition>
+    <span v-if="!enabled" class="mr-6 ml-2">Afwezig</span>
   </div>
 </template>
 
