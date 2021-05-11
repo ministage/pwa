@@ -23,9 +23,9 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
-import gql from "graphql-tag";
-import {getRefreshToken, onLogout} from "@/vue-apollo";
+import {onLogout} from "@/vue-apollo";
 import {USER_DATA} from "@/constants/settings";
+import {directus} from "@/main";
 
 export default {
   name: "More",
@@ -55,21 +55,11 @@ export default {
     }
   },
   methods: {
-    async logout(){
-      await this.$apollo.mutate({
-        mutation: gql`
-            mutation($refresh_token: String!){
-                auth_logout(refresh_token: $refresh_token)
-            }
-        `,
-        variables: {
-          refresh_token: getRefreshToken()
-        },
-        client: 'system'
-      });
-      await onLogout(this.$apollo.getClient());
-      localStorage.removeItem(USER_DATA);
-      await this.$router.push('/login');
+    async logout() {
+      await directus.auth.logout();
+        await onLogout(this.$apollo.getClient());
+        localStorage.removeItem(USER_DATA);
+        await this.$router.push('/login');
     }
   },
   components: {PageHeader}

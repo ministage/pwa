@@ -2,20 +2,19 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context';
-import { TokenRefreshLink } from 'apollo-link-token-refresh';
-import jwtDecode from "jwt-decode";
+//import { TokenRefreshLink } from 'apollo-link-token-refresh';
+//import jwtDecode from "jwt-decode";
 import { ApolloLink } from "apollo-link";
 
-import {ACCESS_TOKEN, REFRESH_TOKEN, API_URL} from "@/constants/settings";
+import {API_URL} from "@/constants/settings";
 import {createApolloClient} from "vue-cli-plugin-apollo/graphql-client";
+import {directus} from "@/main";
 
 
-const url = process.env.VUE_APP_GRAPHQL_HTTP || API_URL;
-
-
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem(ACCESS_TOKEN);
+  await directus.auth.refresh();
+  const token = getAccessToken();
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -25,77 +24,8 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
-export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN);
-
-export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN);
-
-const refreshTokenLink = new TokenRefreshLink({
-  accessTokenField: 'data',
-  // Check if the current access token is valid
-  isTokenValidOrUndefined: () => {
-    const token = getAccessToken();
-    if (!token)
-      return true;
-    if(token === "false")
-      return false;
-
-    try{
-      const { exp } = jwtDecode(token);
-      return Date.now() < exp * 1000;
-    } catch {
-      return false;
-    }
-
-  },
-  // Fetch new access token
-  fetchAccessToken: () => {
-    let token = getRefreshToken();
-    let body = JSON.stringify({
-      refresh_token: token
-    });
-    return fetch(url + '/auth/refresh', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: body
-    });
-  },
-
-  handleResponse: () => { return function (response) {
-    return response
-        .text()
-        .then(function (bodyText) {
-          if (typeof bodyText !== 'string' || !bodyText.length) {
-            return bodyText || '';
-          }
-          try {
-            return JSON.parse(bodyText);
-          } catch (err) {
-            var parseError = err;
-            parseError.response = response;
-            parseError.statusCode = response.status;
-            parseError.bodyText = bodyText;
-            return Promise.reject(parseError);
-          }
-        })
-        .then(function (parsedBody) {
-          if (response.status >= 300) {
-            this.throwServerError(response, parsedBody, "Response not successful: Received status code " + response.status);
-          }
-          return {
-            data: parsedBody
-          };
-        });
-    }
-  },
-  // Set new access token
-  handleFetch: (tokens) => {
-    const { access_token, refresh_token } = tokens;
-    localStorage.setItem(ACCESS_TOKEN, access_token);
-    localStorage.setItem(REFRESH_TOKEN, refresh_token);
-  }
-})
+export const getAccessToken = () => directus.auth.token;
+export const loggedIn = () => directus.auth.token;
 
 // Install the vue plugin
 Vue.use(VueApollo)
@@ -113,13 +43,13 @@ export function createProvider (options = {}) {
   // Create apollo client
   const normal = createApolloClient({
     ...options,
-    link: ApolloLink.from([refreshTokenLink, authLink, normalHttp]),
+    link: ApolloLink.from([authLink, normalHttp]),
     defaultHttpLink: false
   }).apolloClient;
 
   const system = createApolloClient({
     ...options,
-    link: ApolloLink.from([refreshTokenLink, authLink, systemHttp]),
+    link: ApolloLink.from([authLink, systemHttp]),
     defaultHttpLink: false,
   }).apolloClient;
 
@@ -146,11 +76,7 @@ export function createProvider (options = {}) {
 }
 
 // Manually call this when user log in
-export async function onLogin (apolloClient, access_token, refresh_token) {
-  if (typeof localStorage !== 'undefined' && access_token) {
-    localStorage.setItem(ACCESS_TOKEN, access_token)
-    localStorage.setItem(REFRESH_TOKEN, refresh_token)
-  }
+export async function onLogin (apolloClient) {
   try {
     await apolloClient.resetStore()
   } catch (e) {
@@ -161,10 +87,6 @@ export async function onLogin (apolloClient, access_token, refresh_token) {
 
 // Manually call this when user log out
 export async function onLogout (apolloClient) {
-  if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem(ACCESS_TOKEN)
-    localStorage.removeItem(REFRESH_TOKEN)
-  }
   try {
     await apolloClient.resetStore()
   } catch (e) {

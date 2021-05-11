@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import {ACCESS_TOKEN} from "@/constants/settings";
 import PasswordReset from "@/views/PasswordReset";
+import {loggedIn} from "@/vue-apollo";
 
 Vue.use(VueRouter)
 
@@ -93,7 +93,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem(ACCESS_TOKEN) == null) {
+    if (!loggedIn()) {
       next({
         path: '/login',
         params: { nextUrl: to.fullPath }
@@ -114,13 +114,12 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else if(to.matched.some(record => record.meta.guest)) {
-    if(localStorage.getItem(ACCESS_TOKEN) == null){
+    if(!loggedIn()){
       next()
-    }
-    else{
+    } else {
       next({ name: 'Home'})
     }
-  }else {
+  } else {
     next()
   }
 })

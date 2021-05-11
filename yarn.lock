@@ -1359,6 +1359,13 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@directus/sdk@^9.0.0-rc.64":
+  version "9.0.0-rc.64"
+  resolved "https://registry.npmjs.org/@directus/sdk/-/sdk-9.0.0-rc.64.tgz#700835db29ade25803262b47cfd05ad8594f0baf"
+  integrity sha512-+y6xrKebsB70d90tv2ZixviIpvRblTerUEeb1lhCxyk2NY2MnfhzGedttHXeTMT6mhB1SyR9yrSPSLXtaLHUKA==
+  dependencies:
+    axios "^0.21.1"
+
 "@endemolshinegroup/cosmiconfig-typescript-loader@3.0.2":
   version "3.0.2"
   resolved "https://registry.npmjs.org/@endemolshinegroup/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-3.0.2.tgz#eea4635828dde372838b0909693ebd9aafeec22d"
