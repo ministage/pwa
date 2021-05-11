@@ -15,8 +15,8 @@
           }}</span>
         <span v-if="!$apollo.queries.booking.loading" class="xs:text-xl align-middle"><v-icon class="mr-2" large
                                                                                               color="black">mdi-clock-time-eight-outline</v-icon>{{
-            booking.from
-          }} - {{ booking.to }}</span>
+            booking.from.substr(0,5)
+          }} - {{ booking.to.substr(0,5) }}</span>
         <span v-if="!$apollo.queries.booking.loading" class="xs:text-xl align-middle"><v-icon class="mr-2" large
                                                                                               color="black">mdi-home-outline</v-icon>{{
             booking.room.name
