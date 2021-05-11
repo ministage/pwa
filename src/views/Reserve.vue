@@ -205,7 +205,7 @@ export default {
                 title: event.extendedProps.description,
                 html: "van " + event.extendedProps.from.substr(0, 5)  + " tot " + event.extendedProps.to.substr(0, 5)
                     + "<br>" + "door " + event.extendedProps.first_name + " " + event.extendedProps.last_name
-                    + " in " + event.extendedProps.room.name + " op de " + event.extendedProps.location,
+                    + " in " + event.extendedProps.room.name.toLowerCase() + " op de " + event.extendedProps.location.toLowerCase(),
                 icon: 'info',
                 confirmButtonColor: "#29415d",
                 confirmButtonText: "Oke!",
