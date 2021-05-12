@@ -18,7 +18,6 @@
 
 
 <script>
-import 'vue-cal/dist/vuecal.css'
 
 export default {
   name: 'RoomCard',

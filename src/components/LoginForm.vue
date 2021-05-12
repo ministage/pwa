@@ -11,6 +11,7 @@
         required
         outlined
         rounded
+        data-name="email"
     ></v-text-field>
 
     <v-text-field
