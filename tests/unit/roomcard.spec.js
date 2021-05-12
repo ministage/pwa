@@ -1,29 +1,38 @@
-import { render, fireEvent } from '@testing-library/vue'
-import RoomCard from '@/components/RoomCard.vue'
+import Vuetify from "vuetify";
+import RoomCard from '@/components/RoomCard';
+import {createLocalVue, mount} from "@vue/test-utils";
+import Vue from "vue";
 
+Vue.use(Vuetify)
 
-test('Shows room name on card', async () => { 
-    const { getByText } = render(RoomCard, {
-        props: {
-            name: "Test Ruimte",
-        },
-    });
+const localVue = createLocalVue()
+describe('RoomCard.vue', () => {
+    let vuetify
 
-    getByText("Test Ruimte");
+    beforeEach(() => {
+        vuetify = new Vuetify()
+    })
+
+    it('shows room name and location on card', () => {
+        const wrapper = mount(RoomCard, {
+            localVue,
+            vuetify,
+            propsData: {
+                room: {
+                    name: "Test Ruimte",
+                    location: "Locatie",
+                    bookings: [{ date: "2021-05-12", to: "15:00:00", from: "9:00:00" }]
+                }
+            },
+        })
+
+        // We could also verify this differently
+        // by checking the text content
+        const title = wrapper.find('.v-list-item__title')
+        const subtitle = wrapper.find('.v-list-item__subtitle')
+        const bezet = wrapper.find('.v-list-item__subtitle > span')
+        expect(title.text()).toBe('Test Ruimte')
+        expect(subtitle.text()).toBe('Locatie')
+        expect(bezet.text()).toBe('Nu beschikbaar')
+    })
 });
-
-test('Shows amount of people on card', async () => {
-    const { getByText } = render(RoomCard, {
-        props: {
-            amount: 10
-        },
-    });
-
-    getByText("10 personen");
-});
-
-test('Has "nu reserveren" button on card', async () => {
-    const { getByText } = render(RoomCard);
-
-    getByText("Nu reserveren");
-})

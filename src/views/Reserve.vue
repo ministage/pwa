@@ -176,6 +176,7 @@ export default {
         plugins: [timeGridPlugin],
         initialView: 'timeGridDay',
         nowIndicator: true,
+        nowIndicatorClassNames: "nowIndicator",
         eventSources: [
           this.getEvents
         ],
@@ -222,6 +223,11 @@ export default {
 <style lang="scss">
 .selected {
   background-color: #e0bfbf;
+}
+
+
+.nowIndicator {
+  --fc-now-indicator-color: #29415d;
 }
 
 #span1 {

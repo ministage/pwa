@@ -31,9 +31,9 @@
           :rules="[rules.required]"
       ></v-text-field>
       <v-text-field v-model="from" rounded outlined class="w-10/12" label="Starttijd" required type="time"
-                    dense :rules="[rules.required]"></v-text-field>
+                    dense :rules="[rules.required, rules.min]" ></v-text-field>
       <v-text-field v-model="to" rounded outlined class="w-10/12" label="Eindtijd" required type="time"
-                    dense :rules="[rules.required]"></v-text-field>
+                    dense :rules="[rules.required, rules.max]"></v-text-field>
       <v-select v-model="room" rounded outlined class="w-10/12" label="Vergaderruimte" required :items="rooms"
                 item-text="name" item-value="id" dense :rules="[rules.required]"></v-select>
       <v-text-field v-model="description" rounded outlined class="w-10/12" label="Opmerking" required
@@ -102,7 +102,9 @@ export default {
       allRooms: null,
       error: '',
       rules: {
-        required: value => !!value || 'Verplicht.'
+        required: value => !!value || 'Verplicht.',
+        max: value => dayjs(value, "HH:mm") <= dayjs("19:00", "H:mm") || 'Kan geen afspraak maken na 19:00',
+        min: value => dayjs(value, "HH:mm") >= dayjs("8:30", "H:mm") || 'Kan geen afpsraak maken voor 8:30',
       }
     }
   },
