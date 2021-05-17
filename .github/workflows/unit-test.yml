@@ -27,6 +27,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Yarn Install
-      run: yarn install --frozen-lockfile --network-timeout 100000
+      run: yarn install --network-timeout 100000
     - name: Run unit tests
       run: yarn test:unit

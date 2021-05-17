@@ -26,7 +26,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Yarn Install
-      run: yarn install --frozen-lockfile --network-timeout 100000
+      run: yarn install --network-timeout 100000
     - name: Build Vue
       run: yarn build
     - name: Copy index.html to 404.html
