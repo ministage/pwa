@@ -1,8 +1,17 @@
 <template>
   <div style="background-color: #e0bfbf;" class="h-full p-3 flex flex-col justify-between">
-    <header>
-      <v-img :transition="false" width="40%" :aspect-ratio="125/62" class="self-center mt-5 ml-5"
-             :src="require('../assets/California_Logo.svg')"></v-img>
+    <header class="flex flex-row justify-between align-start w-full" style="max-height: 25%">
+      <v-img :transition="false" :aspect-ratio="125/62" class="mt-5 ml-5" max-width="35%"
+             :src="require('../assets/California_Logo.svg')" contain></v-img>
+      <v-btn
+          class="mt-3 mr-5"
+          color="black"
+          icon
+          @click="logout"
+          :loading="loading"
+      >
+        <v-icon size="200%" color="black">mdi-logout</v-icon>
+      </v-btn>
     </header>
 
     <section class="mt-15 mb-auto">
@@ -14,32 +23,29 @@
 
       <div class="text-4xl mt-3 ml-3">{{ firstname }}</div>
     </section>
-      <div class="flex flex-row  flex-grow-0 flex-wrap justify-space-around align-end mb-15" style="max-height: max-content">
-        <v-btn
-            rounded
-            color="#ebd2d2"
-            elevation="2"
-            class="text-none tracking-tight text-2xl font-medium"
-            large
-            to="/rooms"
-        >
-          Reserveer een ruimte
-        </v-btn>
 
-        <v-btn
-            rounded
-            elevation="2"
-            color="#ebd2d2"
-            class="text-none tracking-tight text-2xl font-medium mt-2"
-            large
-            to="/availability"
-        >
-          Aanwezigheid
-        </v-btn>
-      </div>
+    <div class="flex flex-row flex-grow-0 flex-wrap justify-space-around align-end mb-5 mt-6"
+         style="max-height: max-content">
+      <v-btn
+          rounded
+          color="#ebd2d2"
+          elevation="2"
+          class="text-none tracking-tight button-padding"
+          to="/rooms"
+      >
+        Reserveer een ruimte
+      </v-btn>
 
-
-
+      <v-btn
+          rounded
+          elevation="2"
+          color="#ebd2d2"
+          class="text-none tracking-tight mt-2 button-padding"
+          to="/availability"
+      >
+        Aanwezigheid
+      </v-btn>
+    </div>
 
 
   </div>
@@ -48,6 +54,8 @@
 
 <script>
 import {USER_DATA} from "@/constants/settings";
+import {directus} from "@/main";
+import {onLogout} from "@/vue-apollo";
 
 export default {
   name: 'Home',
@@ -68,6 +76,15 @@ export default {
       }
     }
   },
+  methods: {
+    async logout() {
+      this.loading = true;
+      await directus.auth.logout();
+      await onLogout(this.$apollo.getClient());
+      localStorage.removeItem(USER_DATA);
+      await this.$router.push('/login');
+    },
+  }
 }
 </script>
 

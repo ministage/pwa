@@ -23,9 +23,6 @@
 
 <script>
 import PageHeader from "@/components/PageHeader";
-import {onLogout} from "@/vue-apollo";
-import {API_URL, USER_DATA} from "@/constants/settings";
-import {directus} from "@/main";
 
 export default {
   name: "More",
