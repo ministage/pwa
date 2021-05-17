@@ -2,21 +2,15 @@
   <div class="h-full">
     <PageHeader icon="mdi-account-outline" name="Meer"></PageHeader>
     <v-card class="h-full">
-      <v-list dense>
-        <template v-for="part in parts">
-          <v-subheader :key="part.name">{{part.name}}</v-subheader>
-          <v-list-item-group :key="part.name + '1'" color="primary">
-            <v-list-item v-for="button in part.buttons" :key="button.name + '2'" @click="button.method">
-              <v-list-item-icon>
-                <v-icon color="black">{{button.icon}}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>{{button.name}}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </template>
-      </v-list>
+      <p class="mt-5 ml-5"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+        Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+        felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo,
+        fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae,
+        justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper
+        nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
+        Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius
+        laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
+        Nam eget dui. </p>
     </v-card>
   </div>
 </template>
@@ -26,43 +20,6 @@ import PageHeader from "@/components/PageHeader";
 
 export default {
   name: "More",
-  data() {
-    return {
-      parts: [
-        {
-          name: 'Beheer',
-          buttons: [
-            {
-              name: 'Naar beheer-pagina',
-              icon: 'mdi-account-supervisor',
-              method: this.gotoAdmin
-            }
-          ]
-        },
-        {
-          name: 'Account',
-          buttons: [
-            {
-              name: 'Uitloggen',
-              icon: 'mdi-logout',
-              method: this.logout
-            }
-          ]
-        }
-      ]
-    }
-  },
-  methods: {
-    async logout() {
-      await directus.auth.logout();
-        await onLogout(this.$apollo.getClient());
-        localStorage.removeItem(USER_DATA);
-        await this.$router.push('/login');
-    },
-    gotoAdmin(){
-      window.open(API_URL);
-    }
-  },
   components: {PageHeader}
 }
 </script>

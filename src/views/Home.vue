@@ -14,14 +14,14 @@
       </v-btn>
     </header>
 
-    <section class="mt-15 mb-auto">
-      <v-img :transition="false" class="ml-auto mr-auto mt-5" max-height="200" :src="require('../assets/hoofd.png')"
+    <section class="mb-auto">
+      <v-img :transition="false" class="ml-auto mr-auto mt-2" max-width="60%" :src="require('../assets/hoofd.png')"
              contain></v-img>
-      <div class="text-4xl sm:text-3xl mt-7 ml-3 font-extrabold">
+      <div class="text-3xl sm:text-3xl mt-5 ml-3 font-extrabold">
         {{ time }},
       </div>
 
-      <div class="text-4xl mt-3 ml-3">{{ firstname }}</div>
+      <div class="text-3xl mt-1 ml-3">{{ firstname }}</div>
     </section>
 
     <div class="flex flex-row flex-grow-0 flex-wrap justify-space-around align-end mb-5 mt-6"
@@ -52,6 +52,17 @@
 
 </template>
 
+<style>
+.button-padding {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+a:link {
+  color: gray;
+}
+</style>
+
 <script>
 import {USER_DATA} from "@/constants/settings";
 import {directus} from "@/main";
@@ -59,6 +70,11 @@ import {onLogout} from "@/vue-apollo";
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      loading: false
+    }
+  },
   computed: {
     firstname: () => {
       let json = localStorage.getItem(USER_DATA);
@@ -87,9 +103,3 @@ export default {
   }
 }
 </script>
-
-<style>
-a:link {
-  color: gray;
-}
-</style>

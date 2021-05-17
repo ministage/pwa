@@ -32,7 +32,7 @@
           :retain-focus-on-click="false"
       >
         <span class="text-caption" style="color: black;">{{button.name}}</span>
-        <v-icon :color="button.routes.includes(path) ? 'black' : '#a0a0a0'">{{button.icon}}</v-icon>
+        <v-icon :color="button.routes.includes(path) ? 'black' : '#a0a0a0'" size="32px">{{button.icon}}</v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app>
