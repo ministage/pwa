@@ -21,8 +21,7 @@
       </v-btn>
     </v-snackbar>
 
-    <v-bottom-navigation app v-if="!this.$route.meta.guest"
-    >
+    <v-bottom-navigation app v-if="!this.$route.meta.guest">
       <v-btn
           plain
           :ripple="false"
@@ -32,10 +31,9 @@
           width="25%"
           :to="button.location"
           :retain-focus-on-click="false"
-
       >
         <span class="text-caption" style="color: black;">{{button.name}}</span>
-        <v-icon :color="button.routes.includes(path) ? '#ecd660' : 'black'">{{button.icon}}</v-icon>
+        <v-icon :color="button.routes.includes(path) ? 'black' : '#a0a0a0'">{{button.icon}}</v-icon>
       </v-btn>
     </v-bottom-navigation>
   </v-app>
@@ -56,7 +54,7 @@ export default {
     buttons: [
       {
         location: '/',
-        name: 'Home',
+        name: 'Start',
         icon: 'mdi-home-outline',
         routes: [
             "/"

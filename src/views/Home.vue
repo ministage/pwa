@@ -1,20 +1,20 @@
 <template>
   <div style="background-color: #e0bfbf;" class="h-full p-3 flex flex-col justify-between">
     <header>
-      <v-img :transition="false" width="40%" :aspect-ratio="125/62" class="self-center mt-2 ml-2"
+      <v-img :transition="false" width="40%" :aspect-ratio="125/62" class="self-center mt-5 ml-5"
              :src="require('../assets/California_Logo.svg')"></v-img>
     </header>
 
-    <section class="mt-auto mb-auto">
+    <section class="mt-15 mb-auto">
       <v-img :transition="false" class="ml-auto mr-auto mt-5" max-height="200" :src="require('../assets/hoofd.png')"
              contain></v-img>
-      <div class="text-4xl sm:text-3xl mt-3 font-extrabold">
+      <div class="text-4xl sm:text-3xl mt-7 ml-3 font-extrabold">
         {{ time }},
       </div>
 
-      <div class="text-4xl mt-3">{{ firstname }}</div>
+      <div class="text-4xl mt-3 ml-3">{{ firstname }}</div>
     </section>
-      <div class="flex flex-row  flex-grow-0 flex-wrap justify-space-around align-end" style="max-height: max-content">
+      <div class="flex flex-row  flex-grow-0 flex-wrap justify-space-around align-end mb-15" style="max-height: max-content">
         <v-btn
             rounded
             color="#ebd2d2"
