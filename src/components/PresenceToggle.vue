@@ -1,6 +1,6 @@
 <template>
   <label class="mt-0 mb-0" style="height: 60px;">
-    <input type="checkbox" class='toggle' :v-bind="enabled" @click="onClick">
+    <input type="checkbox" class='toggle' :value="enabled" @click="onClick">
     <div class="toggleSwitch">
       <div class='toggleLabel isChecked'>Aanwezig</div>
       <div class='toggleLabel isUnchecked'>Afwezig</div>
