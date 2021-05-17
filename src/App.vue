@@ -1,5 +1,5 @@
 <template>
-  <v-app style="padding-bottom: env(safe-area-inset-bottom)">
+  <v-app>
     <v-main>
       <v-container fluid class="h-full p-0" style="max-width: 100%;">
         <router-view/>
@@ -20,8 +20,7 @@
         Update
       </v-btn>
     </v-snackbar>
-
-    <v-bottom-navigation app v-if="!this.$route.meta.guest">
+    <v-bottom-navigation app v-if="!this.$route.meta.guest" height="76px" style="padding-bottom: 20px;">
       <v-btn
           plain
           :ripple="false"
