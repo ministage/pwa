@@ -7,7 +7,7 @@
 
       <div>
         <v-card-title class="font-semibold text-base tracking-tight truncate">{{ company.name }}</v-card-title>
-        <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#f26262')">
+        <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#999999')">
           {{ countPresent(company.employees) }} aanwezig
         </v-card-subtitle>
       </div>
@@ -21,7 +21,7 @@
             <div class="flex flex-col ml-2.5">
               <span class="text-xl font-semibold black--text">{{ employee.first_name + " " + employee.last_name }}</span>
               <span
-                  :style="'color: ' + (employee.is_present ? '#9fdfba' : '#f26464')">
+                  :style="'color: ' + (employee.is_present ? '#9fdfba' : '#999999')">
           {{ (employee.is_present) ? "aanwezig" : "afwezig" }}</span>
 
             </div>

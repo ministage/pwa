@@ -51,7 +51,7 @@
           bottom
           right
           fab
-          class="mb-12"
+          class="mb-16"
           to="/reserveinformation"
       >
         <v-icon color="black">mdi-plus</v-icon>
