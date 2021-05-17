@@ -10,7 +10,7 @@ export const LOGIN_MUTATION = gql`
 `;
 
 export const PRESENCE_MUTATUTION = gql`
-    mutation($userid: ID!, $presence: Boolean){
+    mutation($userid: ID!, $presence: Boolean!){
         update_users_item(id: $userid, data: { is_present: $presence }){
             is_present
         }
