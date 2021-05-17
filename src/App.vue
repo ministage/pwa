@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="padding-bottom: env(safe-area-inset-bottom)">
     <v-main>
       <v-container fluid class="h-full p-0" style="max-width: 100%;">
         <router-view/>
