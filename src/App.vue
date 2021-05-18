@@ -1,6 +1,35 @@
 <template>
   <v-app>
     <v-main>
+      <v-dialog
+          width="600"
+          v-model="showPrompt"
+      >
+        <v-card width="100%">
+          <v-card-title style="background-color: #e0bfbf">
+            Install the app
+          </v-card-title>
+
+          <v-card-text class="pl-3 pt-2">
+            To install the app<br>
+            1. Press <v-icon>mdi-export-variant</v-icon> Share button<br>
+            2. Press <v-icon>mdi-plus-box</v-icon> Add to Homescreen
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="primary"
+                text
+                @click="dontPrompt"
+            >
+              Cancel
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-container fluid class="h-full p-0" style="max-width: 100%;">
         <router-view/>
       </v-container>
@@ -46,10 +75,24 @@ export default {
   computed: {
     path(){
       return this.$route.path
+    },
+    showPrompt(){
+      let shown = JSON.parse(localStorage.getItem("promptShown"));
+      // we pass in the result of our query-param to this method
+      if (navigator.standalone || shown) {
+        return false;
+      }
+      return ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
+    }
+  },
+  methods: {
+    dontPrompt(){
+      localStorage.setItem("promptShown", "true");
     }
   },
   mixins: [update],
   data: () => ({
+    promptOpen: false,
     buttons: [
       {
         location: '/',
