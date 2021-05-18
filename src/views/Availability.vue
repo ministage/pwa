@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
-    <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center">
-      <span class="mt-auto mb-auto mr-3 text-2xl font-weight-bold">Ik ben:</span>
-      <PresenceToggle class="mt-auto mb-auto " :enabled="$apollo.queries.users_me.loading ? true : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
+    <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center align-center">
+      <span class="mr-3 text-2xl font-weight-bold">Ik ben:</span>
+      <PresenceToggle :enabled="$apollo.queries.users_me.loading ? true : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
     <div class="text-xl mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row
@@ -58,6 +58,8 @@ export default {
     users_me: {
       query: USERS_ME,
       client: 'system',
+      pollInterval: 1000,
+      fetchPolicy: 'network-only'
     },
     companies: {
       query: COMPANIES,
@@ -65,7 +67,8 @@ export default {
         let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
-      pollInterval: 1000
+      pollInterval: 1000,
+      fetchPolicy: 'network-only'
     },
   },
   name: 'Home',
@@ -78,22 +81,20 @@ export default {
     gotoReserve() {
       this.$router.push('/reserve');
     },
-    async togglePresence(current){
-      console.log(current);
-      console.log(!current);
+    async togglePresence(newValue){
       console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
       let id = JSON.parse(localStorage.getItem(USER_DATA)).id
       await this.$apollo.mutate({
         mutation: PRESENCE_MUTATUTION,
         variables: {
           userid: id,
-          presence: !current
+          presence: newValue
         },
         client: 'system',
         update: (store, { data: update_users_item }) => {
           if(update_users_item.is_present !== null){
             const data = store.readQuery({query: USERS_ME});
-            data.users_me.is_present = !current;
+            data.users_me.is_present = newValue;
             store.writeQuery({
               query: USERS_ME,
               data
