@@ -11,15 +11,17 @@
           {{ countPresent(company.employees) }} aanwezig
         </v-card-subtitle>
       </div>
-        <v-icon large class="ml-auto mt-5 mr-3 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
+      <v-icon large class="ml-auto mt-5 mr-3 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
     </div>
     <v-expand-transition>
       <v-list v-show="show">
-        <div class="ml-6 mr-6" v-for="employee in company.employees" :key="employee.id">
+        <div class="ml-6 mr-6" v-for="employee in order(company.employees)" :key="employee.id">
 
           <div class="flex flex-row justify-space-between">
             <div class="flex flex-col ml-2.5">
-              <span class="text-xl font-semibold black--text">{{ employee.first_name + " " + employee.last_name }}</span>
+              <span class="text-xl font-semibold black--text">{{
+                  employee.first_name + " " + employee.last_name
+                }}</span>
               <span
                   :style="'color: ' + (employee.is_present ? '#9fdfba' : '#999999')">
           {{ (employee.is_present) ? "aanwezig" : "afwezig" }}</span>
@@ -58,6 +60,7 @@
 
 <script>
 import {transformUrl} from "@/utils/image";
+
 export default {
   name: 'PresenceCard',
   data: () => ({
@@ -73,7 +76,12 @@ export default {
     },
     countPresence: function (employees) {
       return this.countPresent(employees) > 0;
-    }
+    },
+    order: function (employees) {
+      var present = employees.filter(employee => employee.is_present)
+      var notpresent = employees.filter(employee => !employee.is_present)
+      return present.concat(notpresent);
+    },
   }
 }
 </script>
@@ -82,6 +90,7 @@ export default {
 .font-semibold {
   font-weight: 600 !important;
 }
+
 .text-base {
   font-size: 1rem !important;
   line-height: 1.5rem !important;
