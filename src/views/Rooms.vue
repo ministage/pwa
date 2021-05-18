@@ -37,6 +37,7 @@ export default {
     rooms: {
       query: gql`query{
         rooms {
+            id
             name
             location
             bookings {

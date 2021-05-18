@@ -5,7 +5,7 @@
         <v-list-item-content class="ml-3 mt-1">
           <div class="flex flex-row">
             <v-list-item-title class="font-bold">{{ room.name }}</v-list-item-title>
-            <v-btn text class="justify-end underline normal-case" style="font-family: Poppins" to="/reserve">Bekijk</v-btn>
+            <v-btn text class="justify-end underline normal-case" style="font-family: Poppins" :to="'/reserve/' + room.id">Bekijk</v-btn>
           </div>
           <v-list-item-subtitle class="text-subtitle-1 pb-2" style="color: black">{{
               room.location

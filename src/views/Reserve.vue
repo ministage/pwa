@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
+    <PageHeader icon="mdi-calendar-blank-outline" :name="$apollo.queries.room.loading ? 'Loading...' : room.name"></PageHeader>
     <div class="flex flex-row justify-between align-center pt-3">
       <v-btn
           text
@@ -82,6 +82,21 @@ export default {
     PageHeader,
     FullCalendar
   },
+  apollo: {
+    room: {
+      query: gql`query($room_id: ID!){
+        rooms_by_id(id: $room_id){
+            name
+        }
+        }`,
+      variables() {
+        return {
+          room_id: this.roomId
+        }
+      },
+      update: (data) => data.rooms_by_id,
+    }
+  },
   mounted() {
     this.interval = setInterval(function () {
       this.$refs.calendar.getApi().refetchEvents()
@@ -96,29 +111,9 @@ export default {
     },
     getEvents(fetchInfo, successCallback, failureCallback) {
       this.$apollo.query({
-        query: gql`query {
-          bookings {
-            date
-            to
-            from
-            description
-            room {
-              name
-              location
-            }
-            user {
-              first_name
-              last_name
-              company {
-                name
-                logo {
-                  id
-                  }
-              }
-            }
-          }
-        }`,
-        fetchPolicy: "network-only"
+        query: this.eventQuery,
+        fetchPolicy: "network-only",
+        variables: this.roomId ? {room_id: this.roomId} : undefined
       }).then((response) => {
             successCallback(response.data.bookings.map(booking => {
               return {
@@ -152,6 +147,58 @@ export default {
     }
   },
   computed: {
+    roomId() {
+      return this.$route.params.id;
+    },
+    eventQuery() {
+      if (this.roomId) {
+        return gql`query($room_id: String!) {
+          bookings(filter: { room: {id: {_eq: $room_id}}}) {
+            date
+            to
+            from
+            description
+            room {
+              name
+              location
+            }
+            user {
+              first_name
+              last_name
+              company {
+                name
+                logo {
+                  id
+                  }
+              }
+            }
+          }
+        }`;
+      } else {
+        return gql`query {
+           room{
+              name
+              location
+              bookings {
+                date
+                to
+                from
+                description
+                user {
+                  first_name
+                  last_name
+                    company {
+                        name
+                        logo {
+                  id
+                  }
+              }
+            }
+          }
+         }
+        }`;
+      }
+    },
     currentMonth() {
       return this.selectedDate.locale('nl').format('MMMM');
     },
@@ -183,7 +230,6 @@ export default {
         allDaySlot: false,
         dayHeaders: false,
         headerToolbar: false,
-        lazyFetching: false,
         height: "auto",
         slotEventOverlap: false,
         businessHours: {
