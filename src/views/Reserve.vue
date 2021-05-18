@@ -250,7 +250,7 @@ export default {
           Swal.fire({
                 imageUrl: API_URL + '/assets/' + event.extendedProps.logo,
                 title: event.extendedProps.description,
-                html: "van " + event.extendedProps.from.substr(0, 5)  + " tot " + event.extendedProps.to.substr(0, 5)
+                html: "van " + event.extendedProps.from.substr(0, 5) + " tot " + event.extendedProps.to.substr(0, 5)
                     + "<br>" + "door " + event.extendedProps.first_name + " " + event.extendedProps.last_name
                     + " in " + event.extendedProps.room.name.toLowerCase() + " op de " + event.extendedProps.location.toLowerCase(),
 

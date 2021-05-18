@@ -36,6 +36,14 @@ const routes = [
     }
   },
   {
+    path: '/reserve/:id',
+    name: 'Reserve',
+    component: () => import('../views/Reserve.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
     path: '/availability',
     name: 'Availability',
     component: () => import('../views/Availability.vue'),
