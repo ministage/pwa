@@ -3,10 +3,10 @@
       class="big-toggle ml-3 pt-0"
       v-model="value"
       inset
-      :label="enabled ? 'Aanwezig' : 'Afwezig'"
       color="#6fcf97"
       error-count="0"
       hide-details
+      :loading="loading"
   ></v-switch>
 </template>
 
@@ -15,6 +15,7 @@ export default {
   name: "PresenceToggle",
   props: {
     enabled: Boolean,
+    loading: Boolean,
     onToggle: Function
   },
   computed: {

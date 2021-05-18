@@ -2,8 +2,8 @@
   <div>
     <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
     <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center align-center">
-      <span class="mr-3 text-2xl font-weight-bold">Ik ben:</span>
-      <PresenceToggle :enabled="$apollo.queries.users_me.loading ? true : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
+      <span class="mr-3 text-2xl font-weight-bold">Aanwezig:</span>
+      <PresenceToggle :loading="$apollo.queries.users_me.loading" :enabled="$apollo.queries.users_me.loading ? false : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
     </div>
     <div class="text-xl mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row
