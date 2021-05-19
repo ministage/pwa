@@ -4,12 +4,13 @@
       color="secondary"
       elevation="0"
       class="flex-grow-0"
+      height="64"
   >
     <v-icon
         color="black"
         large
     >{{icon}}</v-icon>
-    <span class="ml-3 mt-auto mb-auto text-2xl">{{name}}</span>
+    <span class="ml-3 text-2xl">{{name}}</span>
   </v-app-bar>
   </v-theme-provider>
 </template>

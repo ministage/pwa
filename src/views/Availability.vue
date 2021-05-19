@@ -58,7 +58,7 @@ export default {
     users_me: {
       query: USERS_ME,
       client: 'system',
-      pollInterval: 1000,
+      pollInterval: 5000,
       fetchPolicy: 'network-only'
     },
     companies: {
@@ -67,7 +67,7 @@ export default {
         let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
-      pollInterval: 1000,
+      pollInterval: 5000,
       fetchPolicy: 'network-only'
     },
   },

@@ -1,45 +1,49 @@
 <template>
   <div>
-    <PageHeader icon="mdi-calendar-blank-outline" :name="$apollo.queries.room.loading ? 'Loading...' : room.name"></PageHeader>
-    <div class="flex flex-row justify-between align-center pt-3">
+    <div class="fixed z-10 bg-white w-full">
+      <PageHeader v-if="this.roomId" icon="mdi-calendar-blank-outline" :name="$apollo.queries.room.loading ? 'Loading...' : room.name"></PageHeader>
+      <PageHeader v-if="!this.roomId" icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
+    <div class="flex flex-row justify-between align-center pt-1">
       <v-btn
           text
-          class="text-none font-weight-bold"
+          class="text-none tracking-tight"
           @click="backWeek"
       >
         <v-icon left size="24">mdi-arrow-left</v-icon>
         Week
       </v-btn>
 
-      <span class="font-extrabold text-xl text-capitalize">{{ this.currentMonth }}</span>
+      <span class="font-semibold text-xl text-capitalize">{{ this.currentMonth }}</span>
 
       <v-btn
           text
-          class="text-none font-weight-bold"
+          class="text-none tracking-tight"
           @click="nextWeek"
       >
         Week
         <v-icon right size="24">mdi-arrow-right</v-icon>
       </v-btn>
     </div>
-    <div class="flex flex-row justify-space-between mt-2 mb-4 h-16">
+    <div class="flex flex-row justify-space-between mt-2 h-16">
       <div class="flex flex-col align-center rounded"
            v-for="day in weekDays" :key="day.date" v-ripple
            @click="setDate(day.data)"
       >
-        <span class="text-none align-start font-weight-bold text-capitalize">{{ day.name }}</span>
+        <span class="text-none align-start text-capitalize">{{ day.name }}</span>
         <span id="span1"
-              :class="'rounded-circle font-weight-bold ' + (day.date === selectedDate.date() ? 'selected' : '')"
+              :class="'rounded-circle font-semibold ' + (day.date === selectedDate.date() ? 'selected' : '')"
         >{{ day.date }}</span>
       </div>
     </div>
-
+    </div>
+    <section class="pt-44">
     <FullCalendar ref="calendar" :options="calendarOptions">
       <template #eventContent="{ timeText, event }">
         <span class="block black--text">{{ event.extendedProps.location }}</span>
         <b class="block truncate black--text">{{ event.extendedProps.company }}</b>
       </template>
     </FullCalendar>
+    </section>
 
 
     <v-fab-transition
@@ -51,7 +55,7 @@
           bottom
           right
           fab
-          class="mb-16"
+          class="mb-20"
           to="/reserveinformation"
       >
         <v-icon color="black">mdi-plus</v-icon>
@@ -95,9 +99,19 @@ export default {
         }
       },
       update: (data) => data.rooms_by_id,
+      errorPolicy() {
+        return this.roomId ? "all" : "ignore";
+      }
     }
   },
   mounted() {
+    setTimeout(function(){
+      let timeslots = Array.from(document.querySelectorAll('.fc-timegrid-slot-label-cushion'));
+      let slot = timeslots.find(slot => slot.textContent === '04:00');
+      slot.scrollIntoView({
+        behavior: "smooth"
+      });
+    }, 1000)
     this.interval = setInterval(function () {
       this.$refs.calendar.getApi().refetchEvents()
     }.bind(this), 5000);
@@ -176,26 +190,26 @@ export default {
         }`;
       } else {
         return gql`query {
-           room{
+           bookings {
+            date
+            to
+            from
+            description
+            room {
               name
               location
-              bookings {
-                date
-                to
-                from
-                description
-                user {
-                  first_name
-                  last_name
-                    company {
-                        name
-                        logo {
+            }
+            user {
+              first_name
+              last_name
+              company {
+                name
+                logo {
                   id
                   }
               }
             }
           }
-         }
         }`;
       }
     },
@@ -220,6 +234,7 @@ export default {
       interval: null,
       selectedDate: dayjs(new Date()),
       calendarOptions: {
+        scrollTime: '06:00',
         plugins: [timeGridPlugin],
         initialView: 'timeGridDay',
         nowIndicator: true,
@@ -237,8 +252,6 @@ export default {
           startTime: '8:00',
           endTime: '19:00',
         },
-        slotMinTime: '8:00',
-        slotMaxTime: '19:00',
         locale: 'nl',
         slotLabelFormat: {
           hour: 'numeric',

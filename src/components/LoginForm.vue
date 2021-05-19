@@ -11,7 +11,7 @@
         required
         outlined
         rounded
-        data-name="email"
+        data-cy="email-input"
     ></v-text-field>
 
     <v-text-field
@@ -24,6 +24,7 @@
         required
         outlined
         rounded
+        data-cy="password-input"
     ></v-text-field>
 
     <div class="flex flex-col">
@@ -32,6 +33,7 @@
           class="px-10 white--text font-weight-regular"
           @click="login"
           rounded
+          data-cy="login-button"
       >
         Log in
       </v-btn>
@@ -40,6 +42,7 @@
           class="mt-4"
           @click="gotoReset"
           rounded
+          data-cy="forgot-button"
       >
         Wachtwoord vergeten
       </v-btn>

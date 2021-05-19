@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="h-full flex flex-col justify-between">
     <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
     <v-alert
         absolute
@@ -8,7 +8,8 @@
     >
       {{error}}
     </v-alert>
-    <v-form class="flex flex-col align-center mt-3" ref="form">
+
+    <v-form class="mt-3" ref="form">
       <v-text-field
           rounded
           outlined
