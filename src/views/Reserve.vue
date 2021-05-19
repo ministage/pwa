@@ -105,13 +105,12 @@ export default {
     }
   },
   mounted() {
-    setTimeout(function(){
       let timeslots = Array.from(document.querySelectorAll('.fc-timegrid-slot-label-cushion'));
       let slot = timeslots.find(slot => slot.textContent === '04:00');
       slot.scrollIntoView({
         behavior: "smooth"
       });
-    }, 1000)
+
     this.interval = setInterval(function () {
       this.$refs.calendar.getApi().refetchEvents()
     }.bind(this), 5000);

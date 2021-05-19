@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full flex flex-col justify-between">
-    <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
+  <div class="h-full flex flex-col">
+    <PageHeader class="justify-self-start" icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
     <v-alert
         absolute
         type="error"
@@ -9,39 +9,100 @@
       {{error}}
     </v-alert>
 
-    <v-form class="mt-3" ref="form">
+    <v-form class="w-10/12 ml-auto mr-auto mt-auto mb-auto" ref="form">
       <v-text-field
           rounded
           outlined
-          class="w-10/12"
+          class="w-full"
           dense
           :loading="$apollo.queries.users_me.loading"
           :value="$apollo.queries.users_me.loading ? '' : users_me.company.name"
           readonly
           label="Bedrijf"
       ></v-text-field>
+      <v-select
+          :loading="$apollo.queries.users_me.loading"
+          v-model="person"
+          rounded
+          outlined
+          class="w-full"
+          label="Persoon"
+          required
+          :items="$apollo.queries.users_me.loading ? [] : users_me.company.employees"
+          item-value="id"
+          dense
+          :rules="[rules.required]"
+      >
+        <template slot="item" slot-scope="data">
+          {{ data.item.first_name }} {{ data.item.last_name }}
+        </template>
+        <template slot="selection" slot-scope="data">
+          {{ data.item.first_name }} {{ data.item.last_name }}
+        </template>
+      </v-select>
       <v-text-field
           v-model="date"
           rounded
           outlined
-          class="w-10/12"
+          class="w-full"
           label="Datum"
           required
           type="date"
           dense
           :rules="[rules.required]"
       ></v-text-field>
-      <v-text-field v-model="from" rounded outlined class="w-10/12" label="Starttijd" required type="time"
-                    dense :rules="[rules.required, rules.min]" ></v-text-field>
-      <v-text-field v-model="to" rounded outlined class="w-10/12" label="Eindtijd" required type="time"
-                    dense :rules="[rules.required, rules.max]"></v-text-field>
-      <v-select v-model="room" rounded outlined class="w-10/12" label="Vergaderruimte" required :items="rooms"
-                item-text="name" item-value="id" dense :rules="[rules.required]"></v-select>
-      <v-text-field v-model="description" rounded outlined class="w-10/12" label="Opmerking" required
-                    dense :rules="[rules.required]"></v-text-field>
-      <v-btn color="primary" class="w-10/12" rounded @click="makeBooking">
-        Reservering plaatsen
-      </v-btn>
+      <v-text-field
+          v-model="from"
+          rounded
+          outlined
+          class="w-full"
+          label="Starttijd"
+          required
+          type="time"
+          dense
+          :rules="[rules.required, rules.min]"
+      ></v-text-field>
+      <v-text-field
+          v-model="to"
+          rounded
+          outlined
+          class="w-full"
+          label="Eindtijd"
+          required
+          type="time"
+          dense
+          :rules="[rules.required, rules.max]"
+      ></v-text-field>
+      <v-select
+          v-model="room"
+          rounded
+          outlined
+          class="w-full"
+          label="Vergaderruimte"
+          required
+          :items="rooms"
+          item-text="name"
+          item-value="id"
+          dense
+          :rules="[rules.required]"
+      ></v-select>
+      <v-text-field
+          v-model="description"
+          rounded
+          outlined
+          class="w-full"
+          label="Opmerking"
+          required
+          dense
+          :rules="[rules.required]"
+      ></v-text-field>
+      <v-btn
+          color="primary"
+          class="w-full"
+          rounded
+          large
+          @click="makeBooking"
+      >Reservering plaatsen</v-btn>
 
     </v-form>
   </div>
@@ -86,9 +147,18 @@ export default {
            company{
                id
                name
+               employees {
+                 id
+                 first_name
+                 last_name
+               }
            }
         }
       }`,
+      update(data){
+        this.person = data.users_me.id;
+        return data.users_me;
+      },
       client: 'system',
     },
   },
@@ -96,6 +166,7 @@ export default {
 
     return {
       date: '',
+      person: '',
       from: '',
       to: '',
       room: '',
@@ -129,7 +200,7 @@ export default {
           from: this.from,
           to: this.to,
           description: this.description,
-          user: user_id,
+          user: this.person,
           room: this.room,
         }
       });
