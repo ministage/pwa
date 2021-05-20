@@ -1,7 +1,8 @@
 <template>
   <div>
     <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
-    <v-img :transition="false" style="height: 20%" :src="require('../assets/rooms.jpg')">
+    <v-skeleton-loader v-if="$apollo.queries.page.loading" height="150" type="image"></v-skeleton-loader>
+    <v-img v-if="!$apollo.queries.page.loading" :transition="false" style="height: 20%" max-height="150" :src="transformUrl(page.banner.id)">
       <v-btn
           rounded
           elevation="0"
@@ -26,12 +27,16 @@
 import PageHeader from "@/components/PageHeader";
 import RoomCard from "@/components/RoomCard";
 import gql from "graphql-tag";
+import {transformUrl} from "@/utils/image";
 
 export default {
   name: "Rooms",
   components: {
     PageHeader,
     RoomCard
+  },
+  methods: {
+    transformUrl: transformUrl
   },
   apollo: {
     rooms: {
@@ -49,6 +54,17 @@ export default {
       }`,
       pollInterval: 5000,
       update: data => data.rooms
+    },
+    page: {
+      query: gql`query{
+        ruimteoverzicht{
+            banner {
+                id
+            }
+        }
+      }`,
+      update: data => data.ruimteoverzicht,
+      fetchPolicy: 'cache-and-network'
     }
   }
 }

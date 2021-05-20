@@ -29,7 +29,7 @@
       <v-btn
           rounded
           color="#ebd2d2"
-          elevation="2"
+          elevation="0"
           class="text-none tracking-tight button-padding"
           to="/rooms"
       >
@@ -38,7 +38,7 @@
 
       <v-btn
           rounded
-          elevation="2"
+          elevation="0"
           color="#ebd2d2"
           class="text-none tracking-tight mt-2 button-padding"
           to="/availability"
