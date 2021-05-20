@@ -4,24 +4,19 @@
     <v-img :src="transformUrl(gif.image.id)"></v-img>
     <div class="flex flex-row flex-wrap justify-evenly align-center">
       <div class="xs:text-2xl text-xl">Uw reservering is geplaatst!</div>
-      <div class="flex flex-col max-w-max">
-        <span v-if="!$apollo.queries.booking.loading" class="xs:text-xl align-middle"><v-icon class="mr-2" large color="black">mdi-comment-text-outline</v-icon>{{booking.description }}</span>
-        <span v-if="!$apollo.queries.booking.loading" class="xs:text-xl align-middle"><v-icon class="mr-2" large
-                                                                                              color="black">mdi-calendar-blank-outline</v-icon>{{
-            booking.date
-          }}</span>
-        <span v-if="!$apollo.queries.booking.loading" class="xs:text-xl align-middle"><v-icon class="mr-2" large
-                                                                                              color="black">mdi-clock-time-eight-outline</v-icon>{{
-            booking.from.substr(0,5)
-          }} - {{ booking.to.substr(0,5) }}</span>
-        <span v-if="!$apollo.queries.booking.loading" class="xs:text-xl align-middle"><v-icon class="mr-2" large
-                                                                                              color="black">mdi-home-outline</v-icon>{{
-            booking.room.name
-          }}</span>
-      </div>
+      <div class="flex flex-row max-w-max">
+        <div class="flex flex-col">
+          <span v-if="!$apollo.queries.booking.loading" class="xs:text-lg align-center mr-2"><v-icon class="mr-1" medium color="black">mdi-comment-text-outline</v-icon>{{booking.description }}</span>
+          <span v-if="!$apollo.queries.booking.loading" class="xs:text-lg align-center mr-2"><v-icon class="mr-1" medium color="black">mdi-calendar-blank-outline</v-icon>{{booking.date }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span v-if="!$apollo.queries.booking.loading" class="xs:text-lg align-center"><v-icon class="mr-1" medium color="black">mdi-clock-time-eight-outline</v-icon>{{booking.from.substr(0, 5) }} - {{ booking.to.substr(0, 5) }}</span>
+          <span v-if="!$apollo.queries.booking.loading" class="xs:text-lg align-center"><v-icon class="mr-1" medium color="black">mdi-home-outline</v-icon>{{booking.room.name }}</span>
+        </div>
+        </div>
     </div>
-    <v-btn color="secondary" class="w-10/12 ml-auto mr-auto mb-4" rounded>Delen</v-btn>
-    <v-btn color="primary" class="w-10/12 ml-auto mr-auto mb-2" rounded to="/rooms">Terug naar ruimtes</v-btn>
+    <v-btn color="#e0bfbf" class="w-10/12 ml-auto mr-auto mb-4 mt-4" rounded>Delen</v-btn>
+    <v-btn color="primary" class="w-10/12 ml-auto mr-auto mb-10" rounded to="/rooms">Terug naar ruimtes</v-btn>
   </div>
 </template>
 
