@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
     <PageHeader icon="mdi-party-popper" name="Yeah.. gefeliciteerd!"></PageHeader>
-    <v-img :src="transformUrl(gif.image.id)"></v-img>
+    <v-img v-if="gif" :src="transformUrl(gif.image.id)" max-height="40%"></v-img>
     <div class="flex flex-row flex-wrap justify-evenly align-center">
       <div class="xs:text-2xl text-xl">Uw reservering is geplaatst!</div>
       <div class="flex flex-row max-w-max">

@@ -60,7 +60,7 @@
           required
           type="time"
           dense
-          :rules="[rules.required, rules.min]"
+          :rules="[rules.required]"
       ></v-text-field>
       <v-text-field
           v-model="to"
@@ -71,7 +71,7 @@
           required
           type="time"
           dense
-          :rules="[rules.required, rules.max]"
+          :rules="[rules.required]"
       ></v-text-field>
       <v-select
           v-model="room"
@@ -175,8 +175,6 @@ export default {
       error: '',
       rules: {
         required: value => !!value || 'Verplicht.',
-        max: value => dayjs(value, "HH:mm") <= dayjs("19:00", "H:mm") || 'Kan geen afspraak maken na 19:00',
-        min: value => dayjs(value, "HH:mm") >= dayjs("8:30", "H:mm") || 'Kan geen afpsraak maken voor 8:30',
       }
     }
   },
@@ -191,8 +189,10 @@ export default {
         this.error = "Er kunnen geen boekingen over elkaar worden geplaatst";
         return;
       }
-      let user_id = (await this.$apollo.queries.users_me.refetch()).data.users_me.id;
-      console.log(user_id);
+      if(dayjs(this.from, "HH:mm") > dayjs(this.to, "HH:mm")){
+        this.error = "De eindtijd mag niet eerder zijn dan de starttijd";
+        return;
+      }
       let data = await this.$apollo.mutate({
         mutation: CREATE_BOOKING_MUTATION,
         variables: {
@@ -235,8 +235,5 @@ export default {
       return conflicts.length <= 0;
     }
   },
-  computed: {
-
-  }
 }
 </script>
