@@ -59,7 +59,6 @@ export default {
       query: USERS_ME,
       client: 'system',
       pollInterval: 5000,
-      fetchPolicy: 'network-only'
     },
     companies: {
       query: COMPANIES,
@@ -68,7 +67,6 @@ export default {
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
       pollInterval: 5000,
-      fetchPolicy: 'network-only'
     },
   },
   name: 'Home',

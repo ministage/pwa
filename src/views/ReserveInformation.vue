@@ -9,15 +9,16 @@
       {{error}}
     </v-alert>
 
-    <v-form class="w-10/12 ml-auto mr-auto mt-auto mb-auto" ref="form">
+    <v-form class="w-10/12 ml-auto mr-auto mt-3 xs:mt-auto mb-3 xs:mb-auto" ref="form">
       <v-text-field
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           dense
           :loading="$apollo.queries.users_me.loading"
           :value="$apollo.queries.users_me.loading ? '' : users_me.company.name"
           readonly
+          hide-details="auto"
           label="Bedrijf"
       ></v-text-field>
       <v-select
@@ -25,12 +26,13 @@
           v-model="person"
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           label="Persoon"
           required
           :items="$apollo.queries.users_me.loading ? [] : users_me.company.employees"
           item-value="id"
           dense
+          hide-details="auto"
           :rules="[rules.required]"
       >
         <template slot="item" slot-scope="data">
@@ -44,56 +46,61 @@
           v-model="date"
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           label="Datum"
           required
           type="date"
           dense
+          hide-details="auto"
           :rules="[rules.required]"
       ></v-text-field>
       <v-text-field
           v-model="from"
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           label="Starttijd"
           required
           type="time"
           dense
+          hide-details="auto"
           :rules="[rules.required]"
       ></v-text-field>
       <v-text-field
           v-model="to"
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           label="Eindtijd"
           required
           type="time"
           dense
+          hide-details="auto"
           :rules="[rules.required]"
       ></v-text-field>
       <v-select
           v-model="room"
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           label="Vergaderruimte"
           required
           :items="rooms"
           item-text="name"
           item-value="id"
           dense
+          hide-details="auto"
           :rules="[rules.required]"
       ></v-select>
       <v-text-field
           v-model="description"
           rounded
           outlined
-          class="w-full"
+          class="w-full mb-2"
           label="Opmerking"
           required
           dense
+          hide-details="auto"
           :rules="[rules.required]"
       ></v-text-field>
       <v-btn
