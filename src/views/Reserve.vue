@@ -305,7 +305,8 @@ export default {
               }
           ).then(result => {
             if(result.isDenied){
-              window.location = `/reserveinformation/${event.id}`;
+              let is_production = window.location.contains('pwa');
+              window.location = (is_production ? '/pwa' : '') + `/reserveinformation/${event.id}`;
             }
           });
         },
