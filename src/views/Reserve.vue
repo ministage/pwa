@@ -73,8 +73,8 @@ import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import localeData from 'dayjs/plugin/localeData';
 import 'dayjs/locale/nl';
+import {API_URL, USER_DATA} from "@/constants/settings";
 import Swal from "sweetalert2";
-import {API_URL} from "@/constants/settings";
 
 dayjs.extend(localeData)
 dayjs.extend(updateLocale)
@@ -269,6 +269,7 @@ export default {
                 confirmButtonColor: "#29415d",
                 confirmButtonText: "Oke!",
                 iconColor: "#e0bfbf",
+
               }
           )
         },

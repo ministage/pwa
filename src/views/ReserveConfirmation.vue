@@ -5,7 +5,7 @@
     <div class="flex flex-row flex-wrap justify-evenly align-center">
       <div class="xs:text-2xl text-xl">Uw reservering is geplaatst!</div>
       <div class="flex flex-row max-w-max">
-        <div class="flex flex-col">
+        <div class="flex flex-col ml-2">
           <span v-if="!$apollo.queries.booking.loading" class="xs:text-lg align-center mr-2"><v-icon class="mr-1" medium color="black">mdi-comment-text-outline</v-icon>{{booking.description }}</span>
           <span v-if="!$apollo.queries.booking.loading" class="xs:text-lg align-center mr-2"><v-icon class="mr-1" medium color="black">mdi-calendar-blank-outline</v-icon>{{booking.date }}</span>
         </div>
