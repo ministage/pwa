@@ -74,8 +74,7 @@ export default {
         return {
           id: this.$route.params.id
         }
-      }
-      ,
+      },
       update: data => data.bookings_by_id
     }
     ,

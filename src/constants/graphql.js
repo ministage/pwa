@@ -24,3 +24,19 @@ export const CREATE_BOOKING_MUTATION = gql`
         }
     }
 `
+
+export const EDIT_BOOKING_MUTATION = gql`
+    mutation($date: Date!, $from: String!, $to: String!, $description: String!, $user: String!, $room: String!, $id: ID!){
+        update_bookings_item(id: $id, data: {date: $date, from: $from, to: $to, description: $description, user: $user, room: $room}){
+            id
+        }
+    }
+`
+
+export const DELETE_BOOKING_MUTATION = gql`
+    mutation($id: ID!){
+        delete_bookings_item(id: $id) {
+            id
+        }
+    }
+`
