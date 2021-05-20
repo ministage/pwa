@@ -1,25 +1,25 @@
 <template>
   <v-card elevation="0">
-    <div class="d-flex flex-row ml-3" @click="show = !show" v-ripple>
-      <v-avatar size="60" round class="my-auto">
+    <div class="d-flex flex-row" @click="show = !show" v-ripple>
+      <v-avatar size="40" rounded class="my-auto">
         <v-img :src="transformUrl(company.logo.id)" contain></v-img>
       </v-avatar>
 
-      <div>
-        <v-card-title class="font-semibold text-base tracking-tight truncate">{{ company.name }}</v-card-title>
+      <div class="max-w-full">
+        <v-card-title class="font-semibold text-base tracking-tight truncate max-w-prose">{{ company.name }}</v-card-title>
         <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#999999')">
           {{ countPresence(company.employees) ? countPresent(company.employees) + " aanwezig" : countNotPresent(company.employees) + " afwezig"}}
         </v-card-subtitle>
       </div>
-      <v-icon large class="ml-auto mt-5 mr-3 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
+      <v-icon large class="ml-auto mt-5 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
     </div>
     <v-expand-transition>
       <v-list v-show="show">
         <div class="ml-6 mr-6" v-for="employee in order(company.employees)" :key="employee.id">
-
           <div class="flex flex-row justify-space-between">
+            <SmallPresenceToggle v-if="inCompany" :enabled="employee.is_present" :employee="employee.id" :on-toggle="onToggle"></SmallPresenceToggle>
             <div class="flex flex-col ml-2.5">
-              <span class="text-xl font-semibold black--text">{{
+              <span class="text-sm font-semibold black--text">{{
                   employee.first_name + " " + employee.last_name
                 }}</span>
               <span
@@ -33,7 +33,9 @@
                   icon
                   style="background-color: #efe2e2;  border-radius: 30%"
                   class="mr-2"
-                  large
+                  medium
+                  :disabled="!employee.phone"
+                  :href="'https://api.whatsapp.com/send?phone=+31' + employee.phone"
               >
                 <v-icon color="black" large>mdi-whatsapp</v-icon>
               </v-btn>
@@ -43,6 +45,8 @@
                   style="background-color: #efe2e2; border-radius: 30%"
                   large
                   class="mr-2"
+                  :disabled="!employee.phone"
+                  :href="'tel:' + employee.phone"
               >
                 <v-icon color="black" large>mdi-cellphone</v-icon>
               </v-btn>
@@ -60,14 +64,18 @@
 
 <script>
 import {transformUrl} from "@/utils/image";
+import SmallPresenceToggle from "@/components/SmallPresenceToggle";
 
 export default {
   name: 'PresenceCard',
+  components: {SmallPresenceToggle},
   data: () => ({
     show: false
   }),
   props: {
     company: Object,
+    inCompany: Boolean,
+    onEmployeeToggle: Function,
   },
   methods: {
     transformUrl: transformUrl,
@@ -85,6 +93,9 @@ export default {
       var notpresent = employees.filter(employee => !employee.is_present)
       return present.concat(notpresent);
     },
+    onToggle(employee, newValue){
+      this.onEmployeeToggle(employee, newValue);
+    }
   }
 }
 </script>

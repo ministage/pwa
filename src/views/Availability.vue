@@ -15,7 +15,7 @@
           v-for="company in companies"
           :key="company.id"
       >
-        <PresenceCard :company="company"></PresenceCard>
+        <PresenceCard :in-company="company.id === users_me.company.id" :company="company" :on-employee-toggle="toggleEmployeePresence"></PresenceCard>
         <VDivider></VDivider>
       </v-col>
     </v-row>
@@ -33,6 +33,9 @@ import {PRESENCE_MUTATUTION} from "@/constants/graphql";
 const USERS_ME = gql`query {
            users_me {
              is_present
+             company {
+                id
+             }
            }
         }`;
 
@@ -49,6 +52,7 @@ const COMPANIES = gql`query {
                 first_name
                 last_name
                 is_present
+                phone
             }
       }
     }`;
@@ -59,9 +63,11 @@ export default {
       query: USERS_ME,
       client: 'system',
       pollInterval: 5000,
+      fetchPolicy: 'cache-and-network',
     },
     companies: {
       query: COMPANIES,
+      fetchPolicy: 'cache-and-network',
       update: data => {
         let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
@@ -105,6 +111,17 @@ export default {
             __typename:"directus_users"
           }
         },
+      });
+      await this.$apollo.queries.companies.refetch();
+    },
+    async toggleEmployeePresence(employee_id, newValue){
+      await this.$apollo.mutate({
+        mutation: PRESENCE_MUTATUTION,
+        variables: {
+          userid: employee_id,
+          presence: newValue
+        },
+        client: 'system'
       });
       await this.$apollo.queries.companies.refetch();
     },
