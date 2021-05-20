@@ -8,7 +8,7 @@
       <div class="max-w-full">
         <v-card-title class="font-semibold text-base tracking-tight truncate max-w-prose">{{ company.name }}</v-card-title>
         <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#999999')">
-          {{ countPresence(company.employees) ? countPresent(company.employees) + " aanwezig" : countNotPresent(company.employees) + " afwezig"}}
+          {{ countPresence(company.employees) ? countPresent(company.employees) + " aanwezig" : countNotPresent(company.employees) + " afwezig" }}
         </v-card-subtitle>
       </div>
       <v-icon large class="ml-auto mt-5 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
@@ -43,7 +43,7 @@
                   tile
                   icon
                   style="background-color: #efe2e2; border-radius: 30%"
-                  large
+                  medium
                   class="mr-2"
                   :disabled="!employee.phone"
                   :href="'tel:' + employee.phone"
@@ -85,7 +85,7 @@ export default {
     countPresence: function (employees) {
       return this.countPresent(employees) > 0;
     },
-    countNotPresent : function (employees){
+    countNotPresent: function (employees) {
       return employees.length - this.countPresent(employees);
     },
     order: function (employees) {
