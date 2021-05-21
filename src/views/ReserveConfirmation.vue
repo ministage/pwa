@@ -15,7 +15,7 @@
         </div>
         </div>
     </div>
-    <v-btn color="#e0bfbf" class="w-10/12 ml-auto mr-auto mb-4 mt-4" rounded @click="share">Delen</v-btn>
+    <v-btn color="#e0bfbf" class="w-10/12 ml-auto mr-auto mb-4 mt-4" rounded @click="share" v-if="canShare">Delen</v-btn>
     <v-btn color="primary" class="w-10/12 ml-auto mr-auto mb-10" rounded to="/rooms">Terug naar ruimtes</v-btn>
   </div>
 </template>
@@ -35,6 +35,9 @@ export default {
   computed: {
     id() {
       return this.$route.params.id;
+    },
+    canShare(){
+      return navigator.share !== undefined;
     }
   },
   data() {
