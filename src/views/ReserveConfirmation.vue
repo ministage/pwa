@@ -15,7 +15,7 @@
         </div>
         </div>
     </div>
-    <v-btn color="#e0bfbf" class="w-10/12 ml-auto mr-auto mb-4 mt-4" rounded>Delen</v-btn>
+    <v-btn color="#e0bfbf" class="w-10/12 ml-auto mr-auto mb-4 mt-4" rounded @click="share">Delen</v-btn>
     <v-btn color="primary" class="w-10/12 ml-auto mr-auto mb-10" rounded to="/rooms">Terug naar ruimtes</v-btn>
   </div>
 </template>
@@ -24,6 +24,10 @@
 import PageHeader from "@/components/PageHeader";
 import gql from "graphql-tag";
 import {transformUrl} from "@/utils/image";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat)
 
 export default {
   name: "ReserveConfirmation",
@@ -53,7 +57,15 @@ export default {
   }
   ,
   methods: {
-    transformUrl: transformUrl
+    transformUrl: transformUrl,
+    async share(){
+      let response = await this.$apollo.queries.booking.refetch({id: this.id});
+      let booking = response.data.bookings_by_id;
+      await navigator.share({
+        title: booking.description,
+        text: `Op ${dayjs(booking.date, "YYYY-MM-DD").format('DD-MM-YYYY')} van ${booking.from.substring(0,5)} tot ${booking.to.substring(0,5)} in ${booking.room.name}`
+      });
+    }
   }
   ,
   apollo: {
