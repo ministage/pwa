@@ -3,7 +3,11 @@
     <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
     <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center align-center">
       <span class="mr-3 text-2xl font-weight-bold">Aanwezig:</span>
-      <PresenceToggle :loading="$apollo.queries.users_me.loading" :enabled="$apollo.queries.users_me.loading ? false : users_me.is_present" :on-toggle="togglePresence"></PresenceToggle>
+      <PresenceToggle
+          :loading="$apollo.queries.users_me.loading"
+          :enabled="$apollo.queries.users_me.loading ? false : users_me.is_present"
+          :on-toggle="togglePresence"
+      ></PresenceToggle>
     </div>
     <div class="text-xl mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row
@@ -15,7 +19,11 @@
           v-for="company in companies"
           :key="company.id"
       >
-        <PresenceCard :in-company="company.id === users_me.company.id" :company="company" :on-employee-toggle="toggleEmployeePresence"></PresenceCard>
+        <PresenceCard
+            :in-company="company.id === users_me.company.id"
+            :company="company"
+            :on-employee-toggle="toggleEmployeePresence"
+        ></PresenceCard>
         <VDivider></VDivider>
       </v-col>
     </v-row>
@@ -63,11 +71,9 @@ export default {
       query: USERS_ME,
       client: 'system',
       pollInterval: 5000,
-      fetchPolicy: 'cache-and-network',
     },
     companies: {
       query: COMPANIES,
-      fetchPolicy: 'cache-and-network',
       update: data => {
         let getPresent = (company) => company.employees.filter(e => e.is_present).length;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
@@ -105,12 +111,6 @@ export default {
             });
           }
         },
-        optimisticResponse: {
-          update_users_item:{
-            is_present:false,
-            __typename:"directus_users"
-          }
-        },
       });
       await this.$apollo.queries.companies.refetch();
     },
@@ -124,6 +124,7 @@ export default {
         client: 'system'
       });
       await this.$apollo.queries.companies.refetch();
+      await this.$apollo.queries.users_me.refetch();
     },
     getPresent(employees) {
       return employees;

@@ -25,7 +25,8 @@ export default {
         return this.enabled;
       },
       set: function(newValue){
-        this.onToggle(newValue);
+        if(!this.loading)
+          this.onToggle(newValue);
       }
     },
   },
