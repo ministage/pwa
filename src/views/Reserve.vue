@@ -115,8 +115,7 @@ export default {
   },
   mounted() {
       let timeslots = Array.from(document.querySelectorAll('.fc-timegrid-slot-label-cushion'));
-      let slot = timeslots.find(slot => slot.textContent === '04:00');
-      slot.scrollIntoView({
+      timeslots[4].scrollIntoView({
         behavior: "smooth"
       });
 
