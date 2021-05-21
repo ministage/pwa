@@ -5,6 +5,7 @@
       color="#6fcf97"
       error-count="0"
       hide-details
+      :ripple="false"
   ></v-switch>
 </template>
 

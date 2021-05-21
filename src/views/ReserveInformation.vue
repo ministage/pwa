@@ -9,11 +9,11 @@
       {{error}}
     </v-alert>
 
-    <v-form class="w-10/12 ml-auto mr-auto mt-3 xs:mt-auto mb-3 xs:mb-auto" ref="form">
+    <v-form class="w-10/12 ml-auto mr-auto pt-4 mt-auto pb-4 mb-auto justify-self-center" ref="form">
       <v-text-field
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           dense
           :loading="$apollo.queries.users_me.loading"
           :value="$apollo.queries.users_me.loading ? '' : users_me.company.name"
@@ -26,7 +26,7 @@
           v-model="person"
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           label="Persoon"
           required
           :items="$apollo.queries.users_me.loading ? [] : users_me.company.employees"
@@ -46,7 +46,7 @@
           v-model="date"
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           label="Datum"
           required
           type="date"
@@ -58,7 +58,7 @@
           v-model="from"
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           label="Starttijd"
           required
           type="time"
@@ -70,7 +70,7 @@
           v-model="to"
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           label="Eindtijd"
           required
           type="time"
@@ -82,7 +82,7 @@
           v-model="room"
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           label="Vergaderruimte"
           required
           :items="rooms"
@@ -96,7 +96,7 @@
           v-model="description"
           rounded
           outlined
-          class="w-full mb-2"
+          :class="input_classes"
           label="Opmerking"
           required
           dense
@@ -139,6 +139,22 @@ export default {
   computed: {
     booking_id(){
       return this.$route.params.id;
+    }
+  },
+  data: function () {
+    return {
+      input_classes: 'w-full mb-5',
+      date: '',
+      person: '',
+      from: '',
+      to: '',
+      room: '',
+      description: '',
+      allRooms: null,
+      error: '',
+      rules: {
+        required: value => !!value || 'Verplicht.',
+      }
     }
   },
   apollo: {
@@ -217,21 +233,7 @@ export default {
       client: 'system',
     },
   },
-  data: function () {
-    return {
-      date: '',
-      person: '',
-      from: '',
-      to: '',
-      room: '',
-      description: '',
-      allRooms: null,
-      error: '',
-      rules: {
-        required: value => !!value || 'Verplicht.',
-      }
-    }
-  },
+
   methods: {
     makeBooking: async function () {
       this.error = '';
