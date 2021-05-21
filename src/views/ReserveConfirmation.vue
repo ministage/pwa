@@ -62,8 +62,8 @@ export default {
       let response = await this.$apollo.queries.booking.refetch({id: this.id});
       let booking = response.data.bookings_by_id;
       await navigator.share({
-        title: booking.description,
-        text: `Op ${dayjs(booking.date, "YYYY-MM-DD").format('DD-MM-YYYY')} van ${booking.from.substring(0,5)} tot ${booking.to.substring(0,5)} in ${booking.room.name}`
+        text: `'${booking.description}' op ${dayjs(booking.date, "YYYY-MM-DD").format('DD-MM-YYYY')} van ${booking.from.substring(0,5)} tot ${booking.to.substring(0,5)} in ${booking.room.name}`,
+        url: window.location.href
       });
     }
   }
