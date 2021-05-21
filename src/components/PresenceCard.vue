@@ -37,7 +37,7 @@
                   :disabled="!employee.phone"
                   :href="'https://api.whatsapp.com/send?phone=+31' + employee.phone"
               >
-                <v-icon color="black" large>mdi-whatsapp</v-icon>
+                <v-icon color="black" medium>mdi-whatsapp</v-icon>
               </v-btn>
               <v-btn
                   tile
@@ -48,7 +48,7 @@
                   :disabled="!employee.phone"
                   :href="'tel:' + employee.phone"
               >
-                <v-icon color="black" large>mdi-cellphone</v-icon>
+                <v-icon color="black" medium>mdi-cellphone</v-icon>
               </v-btn>
             </div>
           </div>

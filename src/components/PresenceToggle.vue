@@ -7,6 +7,7 @@
       error-count="0"
       hide-details
       :loading="loading"
+      :ripple="false"
   ></v-switch>
 </template>
 
