@@ -18,7 +18,7 @@ const transport = new AxiosTransport(API_URL, storage, async () => {
 
 // Auth is how authentication is handled, stored, and refreshed.
 const auth = new Auth(transport, storage, {
-  mode: 'cookie'
+  mode: 'json'
 });
 
 export const directus = new Directus(API_URL, {

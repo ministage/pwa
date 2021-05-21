@@ -188,7 +188,7 @@ export default {
         this.from = booking.from.substr(0,5);
         this.to = booking.to.substr(0,5);
         this.description = booking.description;
-        this.user = booking.user.id;
+        this.person = booking.user.id;
         this.room = booking.room.id;
       }
     },

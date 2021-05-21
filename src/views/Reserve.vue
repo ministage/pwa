@@ -81,13 +81,18 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import localeData from 'dayjs/plugin/localeData';
+import weekday from 'dayjs/plugin/weekday';
 import 'dayjs/locale/nl';
 import {API_URL, USER_DATA} from "@/constants/settings";
 import Swal from "sweetalert2";
 
 dayjs.extend(localeData)
 dayjs.extend(updateLocale)
+dayjs.extend(weekday)
 dayjs.locale('nl');
+dayjs.updateLocale('nl', {
+  weekStart: 1
+});
 
 
 export default {
@@ -237,8 +242,8 @@ export default {
     },
     weekDays() {
       let days = [];
-      for (let i = 1; i < 8; i++) {
-        let day = this.selectedDate.day(i);
+      for (let i = 0; i < 7; i++) {
+        let day = this.selectedDate.weekday(i);
         days.push({
           name: day.format('dd'),
           date: day.date(),
