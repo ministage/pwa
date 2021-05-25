@@ -17,13 +17,20 @@ LogRocket.init('lfdcpq/californiapp');
 Sentry.init({
   Vue,
   dsn: "https://5187f989104a4d57bf501251f066210d@o722539.ingest.sentry.io/5781703",
-  integrations: [new Integrations.BrowserTracing()],
+  integrations: [new Integrations.BrowserTracing({
+    environment: 'production',
+    tracingOptions: {
+      trackComponents: true,
+    },
+    logErrors: true,
+    attachProps: true,
+    attachStacktrace: true,
+  })],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
-  logErrors: true
 });
 
 const storage = new LocalStorage();
