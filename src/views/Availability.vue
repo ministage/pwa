@@ -20,7 +20,7 @@
           :key="company.id"
       >
         <PresenceCard
-            :in-company="$apollo.queries.users_me.loading ? false : company.id === users_me.company.id"
+            :in-company="$apollo.queries.users_me.loading ? true : company.id === users_me.company.id"
             :company="company"
             :on-employee-toggle="toggleEmployeePresence"
         ></PresenceCard>
