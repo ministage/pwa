@@ -3,7 +3,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import '@/assets/css/index.css'
 import router from './router'
-import ErrorService from './services/ErrorService'
+//import ErrorService from './services/ErrorService'
 import vuetify from './plugins/vuetify'
 import { createProvider } from './vue-apollo'
 import {Auth, AxiosTransport, Directus, LocalStorage} from '@directus/sdk';
