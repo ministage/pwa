@@ -30,7 +30,7 @@ export const directus = new Directus(API_URL, {
 });
 
 Vue.config.productionTip = false
-Vue.config.errorHandler = (error) => ErrorService.onError(error);
+//Vue.config.errorHandler = (error) => ErrorService.onError(error);
 
 new Vue({
   router,
