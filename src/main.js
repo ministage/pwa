@@ -8,7 +8,9 @@ import vuetify from './plugins/vuetify'
 import { createProvider } from './vue-apollo'
 import {Auth, AxiosTransport, Directus, LocalStorage} from '@directus/sdk';
 import {API_URL} from "@/constants/settings";
+import LogRocket from 'logrocket';
 
+LogRocket.init('lfdcpq/californiapp');
 
 const storage = new LocalStorage();
 // Transport used to communicate with the server.
