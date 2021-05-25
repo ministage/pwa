@@ -115,16 +115,22 @@ export default {
       await this.$apollo.queries.companies.refetch();
     },
     async toggleEmployeePresence(employee_id, newValue){
-      await this.$apollo.mutate({
-        mutation: PRESENCE_MUTATUTION,
-        variables: {
-          userid: employee_id,
-          presence: newValue
-        },
-        client: 'system'
-      });
-      await this.$apollo.queries.companies.refetch();
-      await this.$apollo.queries.users_me.refetch();
+      console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
+      let id = JSON.parse(localStorage.getItem(USER_DATA)).id
+      if(employee_id === id){
+        await this.togglePresence(newValue);
+      } else {
+        await this.$apollo.mutate({
+          mutation: PRESENCE_MUTATUTION,
+          variables: {
+            userid: employee_id,
+            presence: newValue
+          },
+          client: 'system'
+        });
+        await this.$apollo.queries.companies.refetch();
+        await this.$apollo.queries.users_me.refetch();
+      }
     },
     getPresent(employees) {
       return employees;
