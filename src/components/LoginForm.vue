@@ -73,7 +73,7 @@ export default {
   methods: {
     login () {
         if(this.$refs.form.validate()){
-          this.$props.loginCallback(this.email, this.password);
+          this.$props.loginCallback(this.email.toLowerCase(), this.password);
         }
     },
     gotoReset () {
