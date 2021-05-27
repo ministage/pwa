@@ -3,7 +3,7 @@
     <v-main>
       <v-dialog
           width="600"
-          v-model="showPrompt"
+          v-model="promptOpen"
       >
         <v-card width="100%">
           <v-card-title style="background-color: #e0bfbf">
@@ -72,22 +72,26 @@ import update from './mixins/update'
 
 export default {
   name: 'App',
+  mounted(){
+    let shown = JSON.parse(localStorage.getItem("promptShown"));
+    // we pass in the result of our query-param to this method
+    if (navigator.standalone || shown) {
+      console.log("dont show prompt")
+      return false;
+    }
+    if(['iPhone', 'iPad', 'iPod'].includes(navigator.platform)){
+      this.promptOpen = true;
+    }
+  },
   computed: {
     path(){
       return this.$route.path
     },
-    showPrompt(){
-      let shown = JSON.parse(localStorage.getItem("promptShown"));
-      // we pass in the result of our query-param to this method
-      if (navigator.standalone || shown) {
-        return false;
-      }
-      return ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
-    }
   },
   methods: {
     dontPrompt(){
       localStorage.setItem("promptShown", "true");
+      this.promptOpen = false;
     }
   },
   mixins: [update],
