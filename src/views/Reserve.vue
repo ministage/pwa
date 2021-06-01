@@ -113,6 +113,9 @@ export default {
         }
       },
       update: (data) => data.rooms_by_id,
+      skip(){
+        return this.roomId === undefined
+      },
       errorPolicy() {
         return this.roomId ? "all" : "ignore";
       }

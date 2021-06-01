@@ -5,6 +5,10 @@
         v-if="!$apollo.queries.content.loading"
         :content="content"
     ></Markdown>
+    <v-progress-linear
+        v-else
+        indeterminate
+    ></v-progress-linear>
 
   </div>
 </template>

@@ -5,9 +5,9 @@
              :src="require('../assets/California_Logo.svg')" contain></v-img>
       <v-btn
           class="mt-3 mr-5"
-          color="black"
           icon
           @click="logout"
+          aria-label="Uitlogknop"
           :loading="loading"
       >
         <v-icon size="200%" color="black">mdi-logout</v-icon>
