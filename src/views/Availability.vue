@@ -14,6 +14,7 @@
         dense
         class="mx-0.5"
     >
+      <transition-group name="list" tag="div">
       <v-col
           cols="12"
           v-for="company in companies"
@@ -26,9 +27,22 @@
         ></PresenceCard>
         <VDivider></VDivider>
       </v-col>
+      </transition-group>
     </v-row>
   </div>
 </template>
+
+<style scoped>
+.list-enter, .list-leave-to {
+  opacity: 0;
+}
+.list-enter-active, .list-leave-active {
+  transition: opacity 0.3s ease;
+}
+.list-move {
+  transition: transform 0.3s ease-out;
+}
+</style>
 
 <script>
 import gql from 'graphql-tag';

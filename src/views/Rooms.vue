@@ -1,8 +1,7 @@
 <template>
   <div>
     <PageHeader icon="mdi-calendar-blank-outline" name="Reserveren"></PageHeader>
-    <v-skeleton-loader v-if="$apollo.queries.page.loading" height="150" type="image"></v-skeleton-loader>
-    <v-img v-if="!$apollo.queries.page.loading" :transition="false" style="height: 20%" max-height="150" :src="transformUrl(page.banner.id)">
+    <v-img style="height: 20%" max-height="150" min-height="150" :src="transformUrl(page.banner.id)">
       <v-btn
           rounded
           elevation="0"
