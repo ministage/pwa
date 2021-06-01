@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+const cache = new InMemoryCache();
 //import { TokenRefreshLink } from 'apollo-link-token-refresh';
 //import jwtDecode from "jwt-decode";
 import { ApolloLink } from "apollo-link";
@@ -42,12 +45,14 @@ const systemHttp = createHttpLink({
 export function createProvider (options = {}) {
   // Create apollo client
   const normal = createApolloClient({
+    cache: cache,
     ...options,
     link: ApolloLink.from([authLink, normalHttp]),
     defaultHttpLink: false
   }).apolloClient;
 
   const system = createApolloClient({
+    cache: cache,
     ...options,
     link: ApolloLink.from([authLink, systemHttp]),
     defaultHttpLink: false,
