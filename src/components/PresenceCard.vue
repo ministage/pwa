@@ -15,7 +15,7 @@
     </div>
     <v-expand-transition>
       <v-list v-show="show">
-        <div class="ml-6 mr-6" v-for="employee in order(company.employees)" :key="employee.id">
+        <div class="ml-6 mr-6" v-for="employee in company.employees" :key="employee.id">
           <div class="flex flex-row justify-space-between">
             <SmallPresenceToggle v-if="inCompany" :enabled="employee.is_present" :employee="employee.id" :on-toggle="onToggle"></SmallPresenceToggle>
             <div class="flex flex-col ml-2.5">
@@ -87,11 +87,6 @@ export default {
     },
     countNotPresent: function (employees) {
       return employees.length - this.countPresent(employees);
-    },
-    order: function (employees) {
-      var present = employees.filter(employee => employee.is_present)
-      var notpresent = employees.filter(employee => !employee.is_present)
-      return present.concat(notpresent);
     },
     onToggle(employee, newValue){
       this.onEmployeeToggle(employee, newValue);
