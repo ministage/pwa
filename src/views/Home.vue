@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: #e0bfbf;" class="h-full p-3 flex flex-col justify-between">
     <header class="flex flex-row justify-between align-start w-full" style="max-height: 25%">
-      <v-img :transition="false" :aspect-ratio="125/62" class="mt-5 ml-5" max-width="35%"
+      <v-img :aspect-ratio="125/62" class="mt-5 ml-5" max-width="35%"
              :src="require('../assets/California_Logo.svg')" contain></v-img>
       <v-btn
           class="mt-3 mr-5"
@@ -15,7 +15,7 @@
     </header>
 
     <section class="mb-auto">
-      <v-img :transition="false" class="ml-auto mr-auto mt-2" max-width="60%" :src="require('../assets/hoofd.png')"
+      <v-img class="ml-auto mr-auto mt-2" max-width="60%" min-width="60%" :src="require('../assets/hoofd.png')"
              contain></v-img>
       <div class="text-3xl sm:text-3xl mt-5 ml-3 font-extrabold">
         {{ time }},
