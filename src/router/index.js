@@ -81,7 +81,8 @@ const routes = [
     component: () => import('../views/ReserveInformation.vue'),
     meta: {
       requiresAuth: true,
-    }
+    },
+    props: route => ({date: route.query.date, room: route.query.room})
   },
   {
     path: '/reserveconfirmation/:id',

@@ -32,6 +32,7 @@
           elevation="0"
           class="text-none tracking-tight button-padding"
           to="/rooms"
+          data-cy="reserve-button"
       >
         Reserveer een ruimte
       </v-btn>
@@ -42,6 +43,7 @@
           color="#ebd2d2"
           class="text-none tracking-tight mt-2 button-padding"
           to="/availability"
+          data-cy="presence-button"
       >
         Aanwezigheid
       </v-btn>

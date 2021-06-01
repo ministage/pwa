@@ -65,7 +65,7 @@
           right
           fab
           class="mb-20"
-          to="/reserveinformation"
+          @click="createReservation"
       >
         <v-icon color="black">mdi-plus</v-icon>
       </v-btn>
@@ -132,6 +132,9 @@ export default {
     clearInterval(this.interval)
   },
   methods: {
+    createReservation(){
+      this.$router.push({path: '/reserveinformation', query: {given_date: this.selectedDate.format('YYYY-MM-DD'), given_room: this.roomId ?? ''}})
+    },
     transformUrl(id) {
       return API_URL + '/assets/' + id;
     },

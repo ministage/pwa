@@ -138,11 +138,24 @@ export default {
   components: {PageHeader},
   computed: {
     booking_id(){
+      console.log("Id route param is " + this.$route.params.id)
       return this.$route.params.id;
+    },
+    given_date(){
+      console.log("Given_date query param is " + this.$route.query.given_date)
+      return this.$route.query.given_date;
+    },
+    given_room(){
+      console.log("Given_room query param is " + this.$route.query.given_room)
+      return this.$route.query.given_room;
     }
   },
+  mounted() {
+    this.date = this.given_date;
+    this.room = this.given_room;
+  },
   data: function () {
-    return {
+    let data = {
       input_classes: 'w-full mb-5',
       date: '',
       person: '',
@@ -156,6 +169,7 @@ export default {
         required: value => !!value || 'Verplicht.',
       }
     }
+    return data;
   },
   apollo: {
     bookings_by_id: {
