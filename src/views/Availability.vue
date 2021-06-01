@@ -14,7 +14,7 @@
         dense
         class="mx-0.5"
     >
-      <transition-group name="list" tag="div">
+      <transition-group name="list" tag="div" class="w-full">
       <v-col
           cols="12"
           v-for="company in companies"
