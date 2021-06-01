@@ -5,9 +5,9 @@
         <v-img :src="transformUrl(company.logo.id)" contain></v-img>
       </v-avatar>
 
-      <div class="max-w-full">
-        <v-card-title class="font-semibold text-base tracking-tight truncate max-w-prose">{{ company.name }}</v-card-title>
-        <v-card-subtitle :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#999999')">
+      <div style="max-width: 70%;">
+        <v-card-title class="font-semibold text-base tracking-tight truncate pr-0 d-block max-w-full">{{ company.name }}</v-card-title>
+        <v-card-subtitle class="pr-0" :style="'color: ' + (countPresence(company.employees) ? '#87d7a9' :'#999999')">
           {{ countPresence(company.employees) ? countPresent(company.employees) + " aanwezig" : countNotPresent(company.employees) + " afwezig" }}
         </v-card-subtitle>
       </div>
@@ -60,6 +60,7 @@
     </v-expand-transition>
   </v-card>
 </template>
+
 
 
 <script>
