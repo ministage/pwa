@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import PasswordReset from "@/views/PasswordReset";
 import {loggedIn} from "@/vue-apollo";
+import PasswordResetConfirm from "@/views/PasswordResetConfirm";
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,14 @@ const routes = [
     path: '/password-reset',
     name: 'PasswordReset',
     component: PasswordReset,
+    meta: {
+      guest: true,
+    }
+  },
+  {
+    path: '/password-reset-confirm',
+    name: 'PasswordResetConfirm',
+    component: PasswordResetConfirm,
     meta: {
       guest: true,
     }
