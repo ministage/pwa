@@ -31,10 +31,12 @@ export default {
     room: Object
   },
   computed: {
+    // Kijken of de ruimte bezet is of niet
     taken() {
       let currentBooking = this.room.bookings.find(booking => Date.now() > this.timeToDate(booking.date, booking.from) && Date.now() < this.timeToDate(booking.date, booking.to));
       return currentBooking !== undefined;
     },
+    // Kijken tot wanneer de ruimte vol is
     takenTill() {
       let currentBooking = this.room.bookings.find(booking => Date.now() > this.timeToDate(booking.date, booking.from) && Date.now() < this.timeToDate(booking.date, booking.to));
       return currentBooking ? this.timeToDate(currentBooking.date, currentBooking.to).toLocaleTimeString('nl-NL').substr(0, 5) : undefined

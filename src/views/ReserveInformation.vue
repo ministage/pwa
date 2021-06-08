@@ -249,6 +249,7 @@ export default {
   },
 
   methods: {
+    // Boeking maken met validatie
     makeBooking: async function () {
       this.error = '';
       if(!this.$refs.form.validate()){

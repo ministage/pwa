@@ -54,6 +54,7 @@ export default {
             }
           }
         }`,
+      // Random GIF
     }).then(response => {
       this.gif = response.data.gifs[Math.floor(Math.random() * response.data.gifs.length)]
     });

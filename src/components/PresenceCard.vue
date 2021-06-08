@@ -82,12 +82,15 @@ export default {
   methods: {
     //Zorgt voor de goede url voor het logo
     transformUrl: transformUrl,
+    // Tellen hoeveel er aanwezig zijn
     countPresent: function (employees) {
       return employees.filter(employee => employee.is_present).length;
     },
+    // Kijken of er iemand aanwezig is
     countPresence: function (employees) {
       return this.countPresent(employees) > 0;
     },
+    // Tellen hoeveel er niet aanwezig zijn
     countNotPresent: function (employees) {
       return employees.length - this.countPresent(employees);
     },

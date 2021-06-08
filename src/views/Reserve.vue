@@ -90,6 +90,8 @@ dayjs.extend(localeData)
 dayjs.extend(updateLocale)
 dayjs.extend(weekday)
 dayjs.locale('nl');
+
+// zorgen dat week begint op maandag ipv zondag
 dayjs.updateLocale('nl', {
   weekStart: 1
 });
@@ -133,12 +135,16 @@ export default {
     clearInterval(this.interval)
   },
   methods: {
+    // Ga naar reserveinformation met informatie meegegeven
     createReservation(){
       this.$router.push({path: '/reserveinformation', query: {given_date: this.selectedDate.format('YYYY-MM-DD'), given_room: this.roomId ?? ''}})
     },
+    // URL omzetten
     transformUrl(id) {
       return API_URL + '/assets/' + id;
     },
+
+    // Events ophalen voor in de kalender
     getEvents(fetchInfo, successCallback, failureCallback) {
       this.$apollo.query({
         query: this.eventQuery,
@@ -168,13 +174,16 @@ export default {
             failureCallback(error)
           });
     },
+    // Datum zetten voor kalender
     setDate(date) {
       this.selectedDate = date;
       this.$refs.calendar.getApi().gotoDate(this.selectedDate.toDate());
     },
+    // Week terug wanneer op knop wordt geklikt
     backWeek() {
       this.setDate(this.selectedDate.subtract(1, 'week'));
     },
+    // Week vooruit wanneer op knop wordt geklikt
     nextWeek() {
       this.setDate(this.selectedDate.add(1, 'week'));
     }
@@ -243,9 +252,11 @@ export default {
         }`;
       }
     },
+    // Maand ophalen
     currentMonth() {
       return this.selectedDate.locale('nl').format('MMMM');
     },
+    // Zorgen dat de goede dagen erin staan
     weekDays() {
       let days = [];
       for (let i = 0; i < 7; i++) {
@@ -294,6 +305,7 @@ export default {
           minute: '2-digit',
           meridiem: 'short'
         },
+        // Als er op het event geklikt wordt, SweetAlert alert met alle informatie
         eventClick: function (info) {
           let data = JSON.parse(localStorage.getItem(USER_DATA));
           let userId = data.id;
