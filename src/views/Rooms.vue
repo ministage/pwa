@@ -35,9 +35,11 @@ export default {
     RoomCard
   },
   methods: {
+    //Zorgt voor de goede url voor het logo
     transformUrl: transformUrl
   },
   apollo: {
+    //Haalt de ruimtes op met de boekingen ervan
     rooms: {
       query: gql`query{
         rooms {
@@ -54,6 +56,7 @@ export default {
       pollInterval: 5000,
       update: data => data.rooms
     },
+    //Haalt informatie op over de pagina (tot nu toe alleen de banner)
     page: {
       query: gql`query{
         ruimteoverzicht{

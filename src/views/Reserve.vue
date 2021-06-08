@@ -104,6 +104,7 @@ export default {
     room: {
       query: gql`query($room_id: ID!){
         rooms_by_id(id: $room_id){
+            id
             name
         }
         }`,
@@ -116,9 +117,6 @@ export default {
       skip(){
         return this.roomId === undefined
       },
-      errorPolicy() {
-        return this.roomId ? "all" : "ignore";
-      }
     }
   },
   mounted() {
@@ -199,6 +197,7 @@ export default {
             from
             description
             room {
+              id
               name
               location
             }
@@ -225,6 +224,7 @@ export default {
             from
             description
             room {
+              id
               name
               location
             }

@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="0">
-    <div class="d-flex flex-row" @click="show = !show" v-ripple>
+    <div class="d-flex flex-row" @click="expanded = !expanded" v-ripple>
       <v-avatar size="40" rounded class="my-auto">
         <v-img :src="transformUrl(company.logo.id)" contain></v-img>
       </v-avatar>
@@ -11,10 +11,10 @@
           {{ countPresence(company.employees) ? countPresent(company.employees) + " aanwezig" : countNotPresent(company.employees) + " afwezig" }}
         </v-card-subtitle>
       </div>
-      <v-icon large class="ml-auto mt-5 mb-5">{{ show ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
+      <v-icon large class="ml-auto mt-5 mb-5">{{ expanded ? 'mdi-chevron-down' : 'mdi-chevron-right' }}</v-icon>
     </div>
     <v-expand-transition>
-      <v-list v-show="show">
+      <v-list v-show="expanded">
         <div class="ml-6 mr-6" v-for="employee in company.employees" :key="employee.id">
           <div class="flex flex-row justify-space-between">
             <SmallPresenceToggle v-if="inCompany" :enabled="employee.is_present" :employee="employee.id" :on-toggle="onToggle"></SmallPresenceToggle>
@@ -71,7 +71,8 @@ export default {
   name: 'PresenceCard',
   components: {SmallPresenceToggle},
   data: () => ({
-    show: false
+    //Of het is uitgeklapt
+    expanded: false
   }),
   props: {
     company: Object,
@@ -79,6 +80,7 @@ export default {
     onEmployeeToggle: Function,
   },
   methods: {
+    //Zorgt voor de goede url voor het logo
     transformUrl: transformUrl,
     countPresent: function (employees) {
       return employees.filter(employee => employee.is_present).length;
@@ -89,6 +91,7 @@ export default {
     countNotPresent: function (employees) {
       return employees.length - this.countPresent(employees);
     },
+    //Callback voor de toggle van een medewerker
     onToggle(employee, newValue){
       this.onEmployeeToggle(employee, newValue);
     }

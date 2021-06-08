@@ -33,6 +33,10 @@
 </template>
 
 <style scoped>
+/*
+Deze css wordt gebruikt voor de animaties van de lijst met bedrijven
+*/
+
 .list-enter, .list-leave-to {
   opacity: 0;
 }
@@ -81,11 +85,13 @@ const COMPANIES = gql`query {
 
 export default {
   apollo: {
+    //Deze query haalt informatie over de gebruiker op
     users_me: {
       query: USERS_ME,
       client: 'system',
       pollInterval: 5000,
     },
+    //Deze query haalt de beschikbaarheid van de bedrijven op
     companies: {
       query: COMPANIES,
       update: data => {
@@ -102,12 +108,14 @@ export default {
     PresenceCard,
   },
   methods: {
-    gotoReserve() {
-      this.$router.push('/reserve');
-    },
+    //Deze functie wordt aangeroepen door de grote presence toggle bovenaan
+    //en moet de aanwezigheid aanpassen
     async togglePresence(newValue){
       console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
+      //Haal het userid uit de localstorage
       let id = JSON.parse(localStorage.getItem(USER_DATA)).id
+
+      //Stuur de mutation naar de server om de aanwezigheid aan te passen
       await this.$apollo.mutate({
         mutation: PRESENCE_MUTATUTION,
         variables: {
@@ -115,6 +123,7 @@ export default {
           presence: newValue
         },
         client: 'system',
+        //Update de cache van users_me wanneer er een response van de server is
         update: (store, { data: update_users_item }) => {
           if(update_users_item.is_present !== null){
             const data = store.readQuery({query: USERS_ME});
@@ -126,14 +135,22 @@ export default {
           }
         },
       });
+      //Haal opnieuw de gegevens van de beschikbaarheid van bedrijven op
       await this.$apollo.queries.companies.refetch();
     },
+    //Deze functie wordt aangeroepen wanneer er op de toggle's van een medewerker wordt geklikt
+    //Het past de aanwezigheid aan van een medewerker
     async toggleEmployeePresence(employee_id, newValue){
       console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
+      //Haal het userid uit de localstorage
       let id = JSON.parse(localStorage.getItem(USER_DATA)).id
+
+      //Controleer of het de gebruiker zelf is
       if(employee_id === id){
+        //Pas het van de gebruiker zelf aan
         await this.togglePresence(newValue);
       } else {
+        //Pas het voor een andere medewerker aan
         await this.$apollo.mutate({
           mutation: PRESENCE_MUTATUTION,
           variables: {
@@ -142,12 +159,11 @@ export default {
           },
           client: 'system'
         });
+        //Haal de aanwezigheid van de bedrijven op
         await this.$apollo.queries.companies.refetch();
+        //Haal de aanwezigheid van de gebruiker op
         await this.$apollo.queries.users_me.refetch();
       }
-    },
-    getPresent(employees) {
-      return employees;
     }
   },
 }

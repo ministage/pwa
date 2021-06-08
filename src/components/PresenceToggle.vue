@@ -20,11 +20,13 @@ export default {
     onToggle: Function
   },
   computed: {
+    //De waarde van de toggle zelf
     value: {
       get: function(){
         return this.enabled;
       },
       set: function(newValue){
+        //Stuur geen callback wanneer de knop aan het laden is
         if(!this.loading)
           this.onToggle(newValue);
       }

@@ -74,15 +74,18 @@ export default {
   name: 'Home',
   data() {
     return {
+      //Of er wordt uitgelogd
       loading: false
     }
   },
   computed: {
+    //Haalt de voornaam op uit de localstorage
     firstname: () => {
       let json = localStorage.getItem(USER_DATA);
       let user = JSON.parse(json);
       return user.first_name;
     },
+    //Haalt op of het morgen, middag of avond is
     time: () => {
       let hour = Number.parseInt(new Date().toLocaleTimeString('nl').substr(0, 2));
       if (hour > 6 && hour < 12) {
@@ -95,11 +98,17 @@ export default {
     }
   },
   methods: {
+    //Logt de gebruiker uit
     async logout() {
       this.loading = true;
+      //Log de gebruiker uit bij directus
       await directus.auth.logout();
+      //Zorgt ervoor dat de apollo cache geleegd wordt
       await onLogout(this.$apollo.getClient());
+      //verwijdert de gebruikersinfo uit de localstorage
       localStorage.removeItem(USER_DATA);
+      this.loading = false;
+      //Ga door naar de login pagina
       await this.$router.push('/login');
     },
   }

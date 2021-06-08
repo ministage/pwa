@@ -32,27 +32,39 @@ export default {
   },
   data() {
     return {
+      // De foutmelding, wanneer deze leeg is wordt de foutmelding niet getoond
       error: ""
     }
   },
   methods: {
+    //Logt de gebruiker in en redirect naar Home,
+    // bij een error wordt de foutmelding gezet
     async login(email, password) {
       try {
+        //Haal de foutmelding weg
         this.error = "";
+
+        //Log in bij Directus
         await directus.auth.login(
             {
               email: email,
               password: password,
             },
+            // Ververs de token 2 minuten voordat hij afloopt
             {
               refresh: {
                 time: 2 * 60 * 1000,
               },
             }
         );
+        //Leeg de cache van apollo
         await onLogin(this.$apollo.getClient());
+
+        //Haal informatie over de gebruiker op
         let me = await directus.users.me.read();
+        //Sla de informatie op in de localStorage
         localStorage.setItem(USER_DATA, JSON.stringify(me));
+        //Stuur de gebruiker door naar de homepagina
         await this.$router.push({path: '/'})
       } catch (error) {
         switch (error.errors[0].extensions.code) {
@@ -65,6 +77,8 @@ export default {
           case "INVALID_IP":
             this.error = "Het is niet toegestaan om in te loggen op dit IP-adres";
             break;
+          default:
+            this.error = error.errors[0].extensions.code;
         }
       }
     },
