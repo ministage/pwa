@@ -38,12 +38,9 @@
     </div>
     <v-dialog
       v-model="popup"
+      v-if="popup"
     >
-      <v-card>
-        <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </v-card-text>
-      </v-card>
+      <BookingCard :event="selectedEvent" :edit="eventEdit" :close="eventClose"></BookingCard>
     </v-dialog>
     <section class="pt-44">
     <FullCalendar ref="calendar" :options="calendarOptions">
@@ -83,8 +80,8 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import 'dayjs/locale/nl';
-import {API_URL, USER_DATA} from "@/constants/settings";
-import Swal from "sweetalert2";
+import {API_URL} from "@/constants/settings";
+import BookingCard from "@/components/BookingCard";
 
 dayjs.extend(localeData)
 dayjs.extend(updateLocale)
@@ -99,6 +96,7 @@ dayjs.updateLocale('nl', {
 
 export default {
   components: {
+    BookingCard,
     PageHeader,
     FullCalendar
   },
@@ -166,7 +164,8 @@ export default {
                 room: booking.room,
                 logo: booking.user.company.logo.id,
                 user_id: booking.user.id,
-                created_id: booking.user_created,
+                user_created: booking.user_created,
+                created_id: booking.user_created.id,
               };
             }));
           },
@@ -186,21 +185,43 @@ export default {
     // Week vooruit wanneer op knop wordt geklikt
     nextWeek() {
       this.setDate(this.selectedDate.add(1, 'week'));
+    },
+    //Zorgt ervoor dat er een dialog wordt getoond als je op een event klikt
+    eventClick(info){
+      console.dir(info.event);
+      console.dir(info);
+      this.selectedEvent = {
+        ...info.event.extendedProps,
+        date: info.event.date,
+        id: info.event.id
+      }
+      this.popup = true;
+    },
+    //Sluit de dialog
+    eventClose(){
+      this.selectedEvent = null;
+      this.popup = false;
+    },
+    //Stuurt de gebruiker door naar de bewerkpagina
+    eventEdit(){
+      this.$router.push({path: `/reserveinformation/${this.selectedEvent.id}`});
     }
   },
   computed: {
+    //De ruimte id die in de url kan worden meegegeven
     roomId() {
       return this.$route.params.id;
-    },
-    shouldOpenPopup() {
-      return this.selectedEvent !== null;
     },
     eventQuery() {
       if (this.roomId) {
         return gql`query($room_id: String!) {
           bookings(filter: { room: {id: {_eq: $room_id}}}) {
             id
-            user_created
+            user_created {
+                id
+                first_name
+                last_name
+            }
             date
             to
             from
@@ -227,7 +248,11 @@ export default {
         return gql`query {
            bookings {
             id
-            user_created
+            user_created {
+                id
+                first_name
+                last_name
+            }
             date
             to
             from
@@ -269,10 +294,6 @@ export default {
       }
       return days;
     },
-    userId(){
-      let data = JSON.parse(localStorage.getItem(USER_DATA));
-      return data.id
-    }
   },
   data() {
     return {
@@ -305,33 +326,8 @@ export default {
           minute: '2-digit',
           meridiem: 'short'
         },
-        // Als er op het event geklikt wordt, SweetAlert alert met alle informatie
-        eventClick: function (info) {
-          let data = JSON.parse(localStorage.getItem(USER_DATA));
-          let userId = data.id;
-          let event = info.event;
-          Swal.fire({
-                imageUrl: API_URL + '/assets/' + event.extendedProps.logo,
-                title: event.extendedProps.description,
-                html: "van " + event.extendedProps.from.substr(0, 5) + " tot " + event.extendedProps.to.substr(0, 5)
-                    + "<br>" + "door " + event.extendedProps.first_name + " " + event.extendedProps.last_name
-                    + " in " + event.extendedProps.room.name.toLowerCase() + " op de " + event.extendedProps.location.toLowerCase(),
-
-                confirmButtonColor: "#29415d",
-                confirmButtonText: "Oke!",
-                showDenyButton: event.extendedProps.user_id === userId || event.extendedProps.created_id === userId,
-                denyButtonText: "<p class=\"text-black\">Bewerken</p>",
-                denyButtonColor: "#e0bfbf",
-                iconColor: "#e0bfbf",
-
-              }
-          ).then(result => {
-            if(result.isDenied){
-              let is_production = window.location.href.includes('pwa');
-              window.location = (is_production ? '/pwa' : '') + `/reserveinformation/${event.id}`;
-            }
-          });
-        },
+        // Als er op het event geklikt wordt, dialog met alle informatie
+        eventClick: this.eventClick
       },
     }
   }
