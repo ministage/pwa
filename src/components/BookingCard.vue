@@ -31,7 +31,7 @@
         Sluiten
       </v-btn>
       <v-btn
-          :v-if="canEdit"
+          v-if="canEdit"
           color="secondary"
           @click="edit"
           class="text-none"
