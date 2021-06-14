@@ -26,7 +26,6 @@
 </template>
 
 
-
 <script>
 import {transformUrl} from "@/utils/image";
 import SmallPresenceToggle from "@/components/SmallPresenceToggle";
@@ -34,35 +33,15 @@ import SmallPresenceToggle from "@/components/SmallPresenceToggle";
 export default {
   name: 'PresenceCard',
   components: {SmallPresenceToggle},
-  data: () => ({
-    //Of het is uitgeklapt
-    expanded: false
-  }),
   props: {
     inCompany: Boolean,
     company: Object,
-    inCompany: Boolean,
-    onEmployeeToggle: Function,
+    onToggle: Function
   },
   methods: {
     //Zorgt voor de goede url voor het logo
     transformUrl: transformUrl,
-    // Tellen hoeveel er aanwezig zijn
-    countPresent: function (employees) {
-      return employees.filter(employee => employee.is_present).length;
-    },
-    // Kijken of er iemand aanwezig is
-    countPresence: function (employees) {
-      return this.countPresent(employees) > 0;
-    },
-    // Tellen hoeveel er niet aanwezig zijn
-    countNotPresent: function (employees) {
-      return employees.length - this.countPresent(employees);
-    },
-    //Callback voor de toggle van een medewerker
-    onToggle(employee, newValue){
-      this.onEmployeeToggle(employee, newValue);
-    }
+
   }
 }
 </script>
