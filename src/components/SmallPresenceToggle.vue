@@ -13,7 +13,7 @@
 export default {
   name: "SmallPresenceToggle",
   props: {
-    employee: String,
+    company: String,
     enabled: Boolean,
     loading: Boolean,
     onToggle: Function
@@ -24,7 +24,7 @@ export default {
         return this.enabled;
       },
       set: function(newValue){
-        this.onToggle(this.employee, newValue);
+        this.onToggle(newValue, this.company);
       }
     },
   },

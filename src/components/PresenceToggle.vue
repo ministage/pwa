@@ -36,6 +36,9 @@ export default {
 </script>
 
 <style lang="scss">
+.v-application--is-ltr .v-input--selection-controls__input {
+  margin-right: 0px !important;
+}
 .big-toggle {
   margin-top: 0 !important;
   transform: scale(2);

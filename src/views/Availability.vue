@@ -1,13 +1,15 @@
 <template>
   <div>
     <PageHeader icon="mdi-map-marker-outline" name="Aanwezigheid"></PageHeader>
-    <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full justify-center align-center">
-      <span class="mr-3 text-2xl font-weight-bold">Aanwezig:</span>
+    <div style="color: black; background-color: #f7f0f0; height: 130px" class="flex flex-row w-full align-center ml-0">
+      <span class="mr-3 ml-6 text-xl font-weight-bold">Bedrijf aanwezig:</span>
       <PresenceToggle
+          class="d-block"
           :loading="$apollo.queries.users_me.loading"
-          :enabled="$apollo.queries.users_me.loading ? false : users_me.is_present"
+          :enabled="$apollo.queries.users_me.loading ? false : users_me.company.is_present"
           :on-toggle="togglePresence"
       ></PresenceToggle>
+
     </div>
     <div class="text-xl mt-6 ml-5 mb-3">Aanwezig in het pand:</div>
     <v-row
@@ -21,9 +23,10 @@
           :key="company.id"
       >
         <PresenceCard
-            :in-company="$apollo.queries.users_me.loading ? true : company.id === users_me.company.id"
+            :in-company="$apollo.queries.users_me.loading ? false : users_me.role.name === 'Admin'"
             :company="company"
-            :on-employee-toggle="toggleEmployeePresence"
+            :on-toggle="togglePresence"
+
         ></PresenceCard>
         <VDivider></VDivider>
       </v-col>
@@ -54,13 +57,23 @@ import PresenceCard from '../components/PresenceCard'
 import PageHeader from "@/components/PageHeader";
 import PresenceToggle from "@/components/PresenceToggle";
 import {USER_DATA} from "@/constants/settings";
-import {PRESENCE_MUTATUTION} from "@/constants/graphql";
+
+export const PRESENCE_MUTATUTION = gql`
+    mutation($companyid: ID!, $presence: Boolean!){
+        update_companies_item(id: $companyid, data: { is_present: $presence }){
+            is_present
+        }
+    }
+`;
 
 const USERS_ME = gql`query {
            users_me {
-             is_present
              company {
+                is_present
                 id
+             }
+             role {
+                name
              }
            }
         }`;
@@ -73,13 +86,7 @@ const COMPANIES = gql`query {
                 logo {
                    id
                 }
-            employees{
-                id
-                first_name
-                last_name
-                is_present
-                phone
-            }
+            is_present
       }
     }`;
 
@@ -95,7 +102,7 @@ export default {
     companies: {
       query: COMPANIES,
       update: data => {
-        let getPresent = (company) => company.employees.filter(e => e.is_present).length;
+        let getPresent = (company) => company.is_present;
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
       pollInterval: 5000,
@@ -107,64 +114,51 @@ export default {
     PageHeader,
     PresenceCard,
   },
+  data() {
+    return {
+      company_id: JSON.parse(localStorage.getItem(USER_DATA)).company,
+      user_data: JSON.parse(localStorage.getItem(USER_DATA))
+    }
+  },
   methods: {
     //Deze functie wordt aangeroepen door de grote presence toggle bovenaan
     //en moet de aanwezigheid aanpassen
-    async togglePresence(newValue){
-      console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
-      //Haal het userid uit de localstorage
-      let id = JSON.parse(localStorage.getItem(USER_DATA)).id
+    async togglePresence(newValue, company_id){
+      console.log('TOGGLING');
+      let id = '';
+      if(company_id === undefined) {
+        //Haal het userid uit de localstorage
+        id = JSON.parse(localStorage.getItem(USER_DATA)).company;
+        console.log(id);
+      } else {
+        id = company_id;
+      }
+      console.log(id);
 
       //Stuur de mutation naar de server om de aanwezigheid aan te passen
       await this.$apollo.mutate({
         mutation: PRESENCE_MUTATUTION,
         variables: {
-          userid: id,
+          companyid: id,
           presence: newValue
         },
-        client: 'system',
         //Update de cache van users_me wanneer er een response van de server is
-        update: (store, { data: update_users_item }) => {
-          if(update_users_item.is_present !== null){
-            const data = store.readQuery({query: USERS_ME});
-            data.users_me.is_present = newValue;
-            store.writeQuery({
-              query: USERS_ME,
-              data
-            });
+        update: (store, { data: update_companies_item }) => {
+          if(company_id === this.company_id) {
+            if (update_companies_item.is_present !== null) {
+              const data = store.readQuery({query: USERS_ME});
+              data.users_me.company.is_present = newValue;
+              store.writeQuery({
+                query: USERS_ME,
+                data
+              });
+            }
           }
         },
       });
       //Haal opnieuw de gegevens van de beschikbaarheid van bedrijven op
       await this.$apollo.queries.companies.refetch();
     },
-    //Deze functie wordt aangeroepen wanneer er op de toggle's van een medewerker wordt geklikt
-    //Het past de aanwezigheid aan van een medewerker
-    async toggleEmployeePresence(employee_id, newValue){
-      console.log(JSON.parse(localStorage.getItem(USER_DATA)).id);
-      //Haal het userid uit de localstorage
-      let id = JSON.parse(localStorage.getItem(USER_DATA)).id
-
-      //Controleer of het de gebruiker zelf is
-      if(employee_id === id){
-        //Pas het van de gebruiker zelf aan
-        await this.togglePresence(newValue);
-      } else {
-        //Pas het voor een andere medewerker aan
-        await this.$apollo.mutate({
-          mutation: PRESENCE_MUTATUTION,
-          variables: {
-            userid: employee_id,
-            presence: newValue
-          },
-          client: 'system'
-        });
-        //Haal de aanwezigheid van de bedrijven op
-        await this.$apollo.queries.companies.refetch();
-        //Haal de aanwezigheid van de gebruiker op
-        await this.$apollo.queries.users_me.refetch();
-      }
-    }
   },
 }
 </script>
