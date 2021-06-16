@@ -16,7 +16,11 @@ import {directus} from "@/main";
 
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
-  await directus.auth.refresh();
+  let authResult = await directus.auth.refresh();
+  if(authResult === false){
+    await directus.auth.logout();
+    window.reload(true);
+  }
   const token = getAccessToken();
   // return the headers to the context so httpLink can read them
   return {
