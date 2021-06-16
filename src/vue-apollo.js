@@ -19,7 +19,7 @@ const authLink = setContext(async (_, { headers }) => {
   let authResult = await directus.auth.refresh();
   if(authResult === false){
     await directus.auth.logout();
-    window.reload(true);
+    window.locaion.reload(true);
   }
   const token = getAccessToken();
   // return the headers to the context so httpLink can read them
