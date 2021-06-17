@@ -188,6 +188,7 @@ export default {
             }
           }
         }`,
+      fetchPolicy: 'no-cache',
       variables() {
         return {
           id: this.$route.params.id

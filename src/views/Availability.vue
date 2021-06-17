@@ -6,7 +6,7 @@
       <PresenceToggle
           class="d-block"
           :loading="$apollo.queries.users_me.loading"
-          :enabled="$apollo.queries.users_me.loading ? false : users_me.company.is_present"
+          :enabled="$apollo.queries.users_me.loading || users_me === undefined ? false : users_me.company.is_present"
           :on-toggle="togglePresence"
       ></PresenceToggle>
 
@@ -23,10 +23,9 @@
           :key="company.id"
       >
         <PresenceCard
-            :in-company="$apollo.queries.users_me.loading ? false : users_me.role.name === 'Admin'"
+            :in-company="$apollo.queries.users_me.loading || users_me === undefined ? false : users_me.role.name === 'Admin'"
             :company="company"
             :on-toggle="togglePresence"
-
         ></PresenceCard>
         <VDivider></VDivider>
       </v-col>
@@ -97,6 +96,7 @@ export default {
       query: USERS_ME,
       client: 'system',
       pollInterval: 5000,
+      fetchPolicy: 'no-cache'
     },
     //Deze query haalt de beschikbaarheid van de bedrijven op
     companies: {
@@ -106,6 +106,7 @@ export default {
         return data.companies.sort((a, b) =>  getPresent(b) - getPresent(a));
       },
       pollInterval: 5000,
+      fetchPolicy: 'no-cache'
     },
   },
   name: 'Home',

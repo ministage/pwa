@@ -144,11 +144,7 @@ export default {
 
     // Events ophalen voor in de kalender
     getEvents(fetchInfo, successCallback, failureCallback) {
-      this.$apollo.query({
-        query: this.eventQuery,
-        fetchPolicy: "network-only",
-        variables: this.roomId ? {room_id: this.roomId} : undefined
-      }).then((response) => {
+      this.eventQuery.then((response) => {
             successCallback(response.data.bookings.map(booking => {
               return {
                 id: booking.id,
@@ -214,7 +210,8 @@ export default {
     },
     eventQuery() {
       if (this.roomId) {
-        return gql`query($room_id: String!) {
+        return this.$apollo.query({
+          query: gql`query($room_id: String!) {
           bookings(filter: { room: {id: {_eq: $room_id}}}) {
             id
             user_created {
@@ -243,9 +240,13 @@ export default {
               }
             }
           }
-        }`;
+        }`,
+          fetchPolicy: 'no-cache',
+          variables: { room_id: this.roomId }
+        });
       } else {
-        return gql`query {
+        return this.$apollo.query({
+          query: gql`query {
            bookings {
             id
             user_created {
@@ -274,7 +275,9 @@ export default {
               }
             }
           }
-        }`;
+        }`,
+            fetchPolicy: 'no-cache',
+      });
       }
     },
     // Maand ophalen
