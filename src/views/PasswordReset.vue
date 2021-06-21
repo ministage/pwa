@@ -33,6 +33,7 @@
 import PageHeader from "@/components/PageHeader";
 import gql from "graphql-tag";
 import Swal from "sweetalert2";
+import {API_URL} from "@/constants/settings";
 export default {
   name: "PasswordReset",
   components: {PageHeader},
@@ -65,12 +66,13 @@ export default {
       //Stuur het verzoek
       let data = await this.$apollo.mutate({
         mutation: gql`
-            mutation($email: String!){
-                auth_password_request(email: $email, reset_url: "https://ministage.github.io/pwa/password-reset-confirm")
+            mutation($email: String!, $reset_url: String!){
+                auth_password_request(email: $email, reset_url: $reset_url)
             }
         `,
         variables: {
-          email: this.email
+          email: this.email,
+          reset_url: API_URL + '/password-reset-confirm'
         },
         // Gebruik de system client omdat deze mutation
         // een andere GraphQL url nodig heeft
