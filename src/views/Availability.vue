@@ -117,11 +117,33 @@ export default {
   },
   data() {
     return {
-      company_id: JSON.parse(localStorage.getItem(USER_DATA)).company,
       user_data: JSON.parse(localStorage.getItem(USER_DATA))
     }
   },
+  created(){
+    this.updateUserData();
+  },
   methods: {
+    async updateUserData(){
+      let result = await this.$apollo.query({
+        query: gql`query {
+            users_me {
+                company {
+                    is_present
+                    id
+                }
+                role {
+                    name
+                }
+            }
+            }`,
+        fetchPolicy: 'no-cache',
+        client: 'system',
+      });
+
+      this.user_data = result.data.users_me
+      console.log('Updated')
+    },
     //Deze functie wordt aangeroepen door de grote presence toggle bovenaan
     //en moet de aanwezigheid aanpassen
     async togglePresence(newValue, company_id){
@@ -129,7 +151,7 @@ export default {
       let id = '';
       if(company_id === undefined) {
         //Haal het userid uit de localstorage
-        id = JSON.parse(localStorage.getItem(USER_DATA)).company;
+        id = this.user_data.company.id;
         console.log(id);
       } else {
         id = company_id;
